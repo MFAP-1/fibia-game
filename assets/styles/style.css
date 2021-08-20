@@ -1,0 +1,16 @@
+/* Styles for Fibia, the game */
+
+/* general styling */
+* {
+    margin: 0;
+}
+
+
+/* Main */
+main {
+    background-color: aqua;
+    padding: 50px 0;
+}
+
+
+/* Footer */
