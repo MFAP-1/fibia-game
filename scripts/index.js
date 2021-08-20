@@ -4,12 +4,15 @@
 const canvas = document.getElementById('the-canvas');
 const context = canvas.getContext("2d");
 
-// Instatiating the player object
-const player = new Player(canvas.width/2, canvas.height/2, 100, 1);
+// Instatiating the player object (playerImg comes from 'sprites.js')
+const player = new Player(canvas.width/2, canvas.height/2, 100, playerImg, 1);
 //console.log(player); //-----------------------------------------------------DEBUGGER
 
-// Instatiating the player object
-const monster1 = new Monster(randomCoord(), randomCoord(), 50);
+// Instatiating one array for storing all monsters object (monster#Img comes from 'sprites.js')
+const monsters = [];
+monsters.push(new Dragon(randomCoord(), randomCoord(), 70, 70, 50, monster1Img));
+monsters.push(new Dragon(randomCoord(), randomCoord(), 70, 70, 50, monster1Img));
+monsters.push(new Dragon(randomCoord(), randomCoord(), 70, 70, 50, monster1Img));
 
 
 // MAIN FUNCTION: Waiting for the screen to load.
@@ -19,17 +22,19 @@ window.onload = () => {
     const draw = () => {
         clearCanvas();
         
-        // printing the sprite (playerImg comes from 'sprites.js')
-        context.drawImage(playerImg, player.coordX, player.coordY);
-        context.drawImage(monster1Img, monster1.coordX, monster1.coordY);
-        // VERIFICAR A POSSIBILDIADE DE PASSAR ESSA IMAGEM COMO ATRIBUTO DA CLASSE
+        // updating the sprite of the player
+        player.update();
         
-        // recursive callback
-        // player.coordX += 2; ---------------COMMENTED
-        setInterval(draw, 40); //---------------COMMENTED
+        // updating the sprite of all the monsters
+        for (let i = 0; i < monsters.length; i++) {
+            monsters[i].update();
+        }
+        
+        // Scheduling updates to the canvas (recursive function)
+        setInterval(draw, 20); 
     }
 
-    draw();
+    
 
     // LISTENER: tracking the moviment keys for the player
     document.addEventListener('keydown', (event) => {
@@ -53,9 +58,7 @@ window.onload = () => {
           }
      });
 
-
-
-
+     draw(); // com a inserção de uma  função p/ menu, eu acho que esse aqui pode sair.
 }
 
 
@@ -66,9 +69,13 @@ const clearCanvas = () => {
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-// AUX-FUNCTION: To randomize a coordinate
+// AUX-FUNCTION: To randomize a coordinate (considering the size of any given character = 70x70)
 function randomCoord() {
-    return Math.floor(Math.random() * canvas.width);
+    let currentCoord =  Math.floor(Math.random() * canvas.width);
+    if (currentCoord + 70 > canvas.width) { // checking if the random coordinate would stay out of bounds
+        currentCoord -= 70;
+    }
+    return currentCoord;
 }
 
 

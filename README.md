@@ -1,7 +1,9 @@
 # Fibia, the game
 
+            PRINT AQUI OU GIF
+
 ## About the game
-2d tile based rpg.
+2d tile based rpg........
 
 ## Play it now!
 Just follow the link: xxxxxxx.
