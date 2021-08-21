@@ -13,4 +13,11 @@ main {
 }
 
 
+/* Canvas */
+canvas {
+    /* background-image: url('../sprites/grass.png'); */
+    background-color: gray;
+    border: 4px solid black;
+}
+
 /* Footer */

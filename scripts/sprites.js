@@ -4,8 +4,18 @@
 let playerImg = new Image();
 playerImg.src = '/assets/sprites/player_test.png';
 
-// Monster sprits # 1: Dragon
+// Monster sprits # 1: Rat
 let monster1Img = new Image();
-monster1Img.src = '/assets/sprites/dragon.png';
+monster1Img.src = '/assets/sprites/rat.png';
 
+// Monster sprits # 2: Dragon
+let monster2Img = new Image();
+monster2Img.src = '/assets/sprites/dragon.png';
 
+// Monster sprits # 3: Demon
+let monster3Img = new Image();
+//monster3Img.src = '/assets/sprites/.......';
+
+// Grave sprite
+let grave = new Image();
+grave.src = '/assets/sprites/grave.jpg';
