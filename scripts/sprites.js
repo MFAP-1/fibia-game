@@ -14,7 +14,7 @@ monster2Img.src = '/assets/sprites/dragon.png';
 
 // Monster sprits # 3: Demon
 let monster3Img = new Image();
-//monster3Img.src = '/assets/sprites/.......';
+monster3Img.src = '/assets/sprites/Demon.gif';
 
 // Grave sprite
 let grave = new Image();

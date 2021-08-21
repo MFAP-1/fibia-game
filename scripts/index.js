@@ -5,23 +5,40 @@ const canvas = document.getElementById('the-canvas');
 const context = canvas.getContext("2d");
 
 // Instatiating the player object (playerImg comes from 'sprites.js')
-const player = new Player(canvas.width/2, canvas.height/2, 100, playerImg, 1);
+const player = new Player(canvas.width/2, canvas.height/2, 150, playerImg);
 const playerHeathBar = new HealthBar(player.coordX + 10, player.coordY - 5, "red");
 
 
-// Instatiating one array for storing all monsters object (monster#Img comes from 'sprites.js')
-const monsters = [];
+
+
+
+/* FUNCTION: To generate a monster every iteration. Rules: 
+    - Up to 4 monsters on the screen at any given time. 
+    - The monster that will be generated respects the current level of the player.
+*/
+const monsters = []; // Instatiating one array for storing all monsters object 
+function monsterGenerator() {
+    for (let i = monsters.length; i < 4; i++) { // (monster#Img comes from 'sprites.js')
+        if (player.level < 2) {
+            monsters.push(new Rat(randomCoord(), randomCoord(), 70, 70, 20, monster1Img, 3)); 
+        } else if (player.level < 3) {
+            monsters.push(new Dragon(randomCoord(), randomCoord(), 70, 70, 50, monster2Img, 7));
+        } else {
+            monsters.push(new Demon(randomCoord(), randomCoord(), 70, 70, 100, monster3Img, 15));
+        }
+    }    
+}
 // Manually inserting random monsters (LATER CREATE A FUNCTION FOR THAT)
-monsters.push(new Rat(randomCoord(), randomCoord(), 70, 70, 20, monster1Img, 3));
-monsters.push(new Rat(randomCoord(), randomCoord(), 70, 70, 20, monster1Img, 3));
-monsters.push(new Rat(randomCoord(), randomCoord(), 70, 70, 20, monster1Img, 3));
-monsters.push(new Dragon(randomCoord(), randomCoord(), 70, 70, 50, monster2Img, 7));
+// monsters.push(new Rat(randomCoord(), randomCoord(), 70, 70, 20, monster1Img, 3));
+// monsters.push(new Rat(randomCoord(), randomCoord(), 70, 70, 20, monster1Img, 3));
+// monsters.push(new Rat(randomCoord(), randomCoord(), 70, 70, 20, monster1Img, 3));
+// monsters.push(new Dragon(randomCoord(), randomCoord(), 70, 70, 50, monster2Img, 7));
 
 
-// Graves array - TODO
+
+// Graves array
 const graves = [];
-// if it is dead, clear the monsters array
-// context.drawImage(grave, this.coordX, this.coordY, this.width, this.height);
+
 
 // MAIN FUNCTION: Waiting for the screen to load.
 window.onload = () => {
@@ -34,21 +51,36 @@ window.onload = () => {
         if (!player.checkDeath()) {
             player.update();
             playerHeathBar.renderHealthBar();
+            player.levelUp();
         }
         
         // updating the sprite of all the monsters
         for (let i = 0; i < monsters.length; i++) {
             if (!monsters[i].checkDeath()) { // if the monster still alive, update it
                 monsters[i].update();
-            } else { // when the monster is dead
+            // when the monster is dead
+            } else { 
                 console.log('monster morreu'); //--------------------------------------DEBUGGER
-                player.surroundingMonsters.splice(0, 1);
+                // inserting a gravestone
+                monsters[i].image = grave;
+                graves.push(monsters[i]);
+                if (graves.length > 2) graves.shift(); // the keep the count of displayed graves up to 2 at the time
+                // increase experience for the player
+                player.experience += monsters[i].yieldExperience;
+                // removing the monster from the array and from the players surrounding
                 monsters.splice(i, 1);
+                player.surroundingMonsters.splice(0, 1);
             }
+        }
+        // updating the sprites of all the graves (if any) 
+        for (let i = 0; i < graves.length; i++) {
+            graves[i].update();
         }
         
         // Checking the loss condition of the game (if the player still alive)
         if (!player.alive) gameOver();
+
+        monsterGenerator();
 
         // Scheduling updates to the canvas (recursive function)
         setInterval(draw, 20); 
