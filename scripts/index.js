@@ -4,27 +4,29 @@
 const canvas = document.getElementById('the-canvas');
 const context = canvas.getContext("2d");
 
+
 // Instatiating the player object (playerImg comes from 'sprites.js')
 const player = new Player(canvas.width/2, canvas.height/2, 150, playerImg);
-const playerHeathBar = new HealthBar(player.coordX + 10, player.coordY - 5, "red");
+const playerHealthBar = new HealthBar(player.coordX, player.coordY , "green", player.health);
 
 
-
-
-
-/* FUNCTION: To generate a monster every iteration. Rules: 
+/* FUNCTION: To instatiate monsters every iteration. Rules: 
     - Up to 4 monsters on the screen at any given time. 
     - The monster that will be generated respects the current level of the player.
 */
 const monsters = []; // Instatiating one array for storing all monsters object 
+const monstersHealthBar = []; // Instatiating one array for storing all monsters object 
 function monsterGenerator() {
     for (let i = monsters.length; i < 4; i++) { // (monster#Img comes from 'sprites.js')
         if (player.level < 2) {
-            monsters.push(new Rat(randomCoord(), randomCoord(), 70, 70, 20, monster1Img, 3)); 
+            monsters.push(new Rat(randomCoord(), randomCoord(), 70, 70, 20, monster1Img, 3));
+            monstersHealthBar.push(new HealthBar(monsters[i].coordX, monsters[i].coordY, "red", monsters[i].health)); 
         } else if (player.level < 3) {
             monsters.push(new Dragon(randomCoord(), randomCoord(), 70, 70, 50, monster2Img, 7));
+            monstersHealthBar.push(new HealthBar(monsters[i].coordX + 10, monsters[i].coordY, "red", monsters[i].health));
         } else {
             monsters.push(new Demon(randomCoord(), randomCoord(), 70, 70, 100, monster3Img, 15));
+            monstersHealthBar.push(new HealthBar(monsters[i].coordX, monsters[i].coordY, "red", monsters[i].health));
         }
     }    
 }
@@ -35,14 +37,13 @@ function monsterGenerator() {
 // monsters.push(new Dragon(randomCoord(), randomCoord(), 70, 70, 50, monster2Img, 7));
 
 
-
 // Graves array
 const graves = [];
 
 
 // MAIN FUNCTION: Waiting for the screen to load.
 window.onload = () => {
-        
+
     // FUNCTION: to print the screen
     const draw = () => {
         clearCanvas();
@@ -50,14 +51,18 @@ window.onload = () => {
         // updating the sprite of the player (if the player still alive)
         if (!player.checkDeath()) {
             player.update();
-            playerHeathBar.renderHealthBar();
+            playerHealthBar.updateHealthBar(player.coordX, player.coordY, player.health);
             player.levelUp();
         }
         
         // updating the sprite of all the monsters
         for (let i = 0; i < monsters.length; i++) {
             if (!monsters[i].checkDeath()) { // if the monster still alive, update it
+                
                 monsters[i].update();
+                monstersHealthBar[i].updateHealthBar(monsters[i].coordX, monsters[i].coordY, monsters[i].health);
+                // setTimeout(monsters[i].randomMovement(), 2.0*1000);
+                //monsters[i].randomMovement();
             // when the monster is dead
             } else { 
                 console.log('monster morreu'); //--------------------------------------DEBUGGER
@@ -69,25 +74,27 @@ window.onload = () => {
                 player.experience += monsters[i].yieldExperience;
                 // removing the monster from the array and from the players surrounding
                 monsters.splice(i, 1);
+                monstersHealthBar.splice(i, 1);
                 player.surroundingMonsters.splice(0, 1);
             }
         }
+
         // updating the sprites of all the graves (if any) 
         for (let i = 0; i < graves.length; i++) {
             graves[i].update();
         }
         
+        // Generating monsters on the screen
+        monsterGenerator();
+
         // Checking the loss condition of the game (if the player still alive)
         if (!player.alive) gameOver();
 
-        monsterGenerator();
-
         // Scheduling updates to the canvas (recursive function)
-        setInterval(draw, 20); 
+        setInterval(draw, 60); 
     }
 
     
-
     // LISTENER: tracking the moviment keys for the player
     document.addEventListener('keyup', (event) => {
         switch (event.keyCode) {
@@ -110,7 +117,23 @@ window.onload = () => {
         }
     });
 
-    draw(); // com a inserção de uma  função p/ menu, eu acho que esse aqui pode sair.
+
+    // LISTENER: waiting for the 'ENTER' command on the menu, to start
+    document.addEventListener('keyup', (event) => {
+        if (event.keyCode === 13) { // enter
+            draw();
+        }
+    });
+
+    menu(); 
+}
+
+
+// FUNCTION: main menu screen
+const menu = () => {
+    context.font = '30px serif';
+    context.fillStyle = 'black';
+    context.fillText('PRESS ENTER TO PLAY.', 170, 350);
 }
 
 
@@ -119,7 +142,7 @@ const gameOver = () => {
     clearCanvas();
     context.font = '30px serif';
     context.fillStyle = 'black';
-    context.fillText('GAME OVER', 350, 350);
+    context.fillText('GAME OVER :(', 300, 350);
 }
 
 

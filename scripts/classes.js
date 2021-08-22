@@ -132,18 +132,41 @@ class Player extends Character {
         const levelDisplayElement = document.querySelector('div span');
         levelDisplayElement.innerHTML = this.level;
     }
-
-    
 }
 
+// let counter = 0;
 
 //
 class Monster extends Character {
     constructor(coordX, coordY, width, height, health, image, strength, yieldExperience) {
         super(coordX, coordY, width, height, health, image, strength);
         this.yieldExperience = yieldExperience;
+        this.move = 0; // 0 - up, 1- down, 2- left and 3- right
     }
-    
+    randomMovement() {
+        // counter++;
+        // console.log(counter);
+        // setTimeout( () => { // verificar a melhor forma de dar esse intervalo de tempo
+            switch (this.move) {
+                case 0: 
+                    this.coordY -= this.velocity;
+                    this.move = Math.floor(Math.random() * 4);
+                    break;
+                case 1:
+                    this.coordY += this.velocity;
+                    this.move = Math.floor(Math.random() * 4);
+                    break;
+                case 2: 
+                    this.coordX -= this.velocity;
+                    this.move = Math.floor(Math.random() * 4);
+                    break;
+                case 3: 
+                    this.coordX += this.velocity;
+                    this.move = Math.floor(Math.random() * 4);
+                    break;
+            }
+        // }, 2.0*500);
+    }
 }
 
 
@@ -172,20 +195,18 @@ class Demon extends Monster {
 
 // Class for a generic health bar
 class HealthBar {
-    constructor(coordX, coordY, color) {
+    constructor(coordX, coordY, color, maxHealth) {
         this.coordX = coordX;
         this.coordY = coordY;
         this.color = color;
         this.width = 50;
         this.height = 10;
-        this.maxHealth = player.health;
+        this.maxHealth = maxHealth;
         this.currentHealth = this.width; // rep
     }
  
-    // rendering the healthbar to the screen
+    // rendering the healthbar to the screen // printing the sprite of the health bar
     renderHealthBar() {
-        this.updateHealthBar();
-        // printing the sprite of the health bar
         context.lineWidth = 3;
         context.fillStyle = this.color;
         context.fillRect(this.coordX, this.coordY, this.currentHealth, this.height);
@@ -193,9 +214,12 @@ class HealthBar {
     }
     
     // updating the position and the value of the health bar
-    updateHealthBar() {
-        this.coordX = player.coordX + 10;
-        this.coordY = player.coordY - 5;
-        this.currentHealth = (player.health / this.maxHealth) * this.width; // as a percentage
+    updateHealthBar(characterCoordX, characterCoordY, characterHealth) {
+        this.coordX = characterCoordX + 10; // esse +10 -5 devem sair depois de arrumar as sprites direitinho
+        this.coordY = characterCoordY - 5;
+        this.currentHealth = (characterHealth / this.maxHealth) * this.width; // as a percentage
+
+        // to render/print on the screen
+        this.renderHealthBar();
     }   
 }
