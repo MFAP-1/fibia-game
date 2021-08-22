@@ -74,8 +74,10 @@ class Character {
 
 // SUB CLASS: to define attributes and methods for the player 
 class Player extends Character {
-    constructor(coordX, coordY, health, image) {
-        super(coordX, coordY, 70, 70, health, image, 15);
+    constructor(coordX, coordY) {
+        // 'super-requirement-order': coordX, coordY, width, height, health, image, strength
+        super(coordX, coordY, 70, 70, 150, playerImg, 15);
+
         this.level = 1;
         this.surroundingMonsters = [];
         this.experience = 0;
@@ -83,7 +85,7 @@ class Player extends Character {
     // 4 Methods to move the player arround. (Checking the collision every step)
     moveUp() {
         this.coordY -= this.velocity;
-        if (this.collisionDetection()){ // if there was a collision with the intended movement
+        if (this.collisionDetection()) { // if there was a collision with the intended movement
             this.coordY += this.velocity; // revert that movement
             console.log('COLISÃO 1'); // ------------------------------DEBUGGER
             this.surroundingMonsters.forEach(monster => { monster.causeDamage(); });
@@ -93,7 +95,7 @@ class Player extends Character {
     }
     moveDown() {
         this.coordY += this.velocity;
-        if (this.collisionDetection()){
+        if (this.collisionDetection()) {
             this.coordY -= this.velocity;
             console.log('COLISÃO 2'); 
             this.surroundingMonsters.forEach(monster => { monster.causeDamage(); });
@@ -103,7 +105,7 @@ class Player extends Character {
     }
     moveLeft() {
         this.coordX -= this.velocity;
-        if (this.collisionDetection()){
+        if (this.collisionDetection()) {
             this.coordX += this.velocity;
             console.log('COLISÃO 3'); 
             this.surroundingMonsters.forEach(monster => { monster.causeDamage(); });
@@ -113,7 +115,7 @@ class Player extends Character {
     }
     moveRight() {
         this.coordX += this.velocity;
-        if (this.collisionDetection()){
+        if (this.collisionDetection()) {
             this.coordX -= this.velocity;
             console.log('COLISÃO 4'); 
             this.surroundingMonsters.forEach(monster => { monster.causeDamage(); });
@@ -121,15 +123,7 @@ class Player extends Character {
             this.surroundingMonsters = []; 
         }
     }
-    // causeDamage() {
-    //     if (player.surroundingMonsters.length > 0) { // avoiding calling it for the wall
-    //         console.log('COMBATE', player.health, player.surroundingMonsters[0].health); //------------------------DEBUGGER
-    //         player.health -= player.surroundingMonsters[0].strength;
-    //         player.surroundingMonsters[0].health -= player.strength;
-    //         setInterval(player.causeDamage, 2000); // every two second it will cause damage   
-    //     }
-    // }
-
+    
     // 
     levelUp() {
         const experienceTable = [1000, 2050, 4200, 8600, 17600]; // pre-defined amounts of experience required for leveling up
@@ -151,23 +145,26 @@ class Player extends Character {
             if ((clickedX >= monster.coordX && clickedX <= monster.coordX + monster.width) &&
                 (clickedY >= monster.coordY && clickedY <= monster.coordY + monster.height)) {
                     monster.health -= player.strength;
-                }
+            }
         });
     }
 }
 
-// let counter = 0;
+// let counter = 0; // -----------------------DEBUGGER
 
 // SUB CLASS (INTERMEDIATE CLASS): to define attributes and methods for a generic monster 
 class Monster extends Character {
     constructor(coordX, coordY, width, height, health, image, strength, yieldExperience) {
+        // 'super-requirement-order': coordX, coordY, width, height, health, image, strength
         super(coordX, coordY, width, height, health, image, strength);
+
         this.yieldExperience = yieldExperience;
         this.move = 0; // 0 - up, 1- down, 2- left and 3- right
     }
+
     randomMovement() {
-        // counter++;
-        // console.log(counter);
+        // counter++; // -----------------------DEBUGGER
+        // console.log(counter); // -----------------------DEBUGGER
         // setTimeout( () => { // verificar a melhor forma de dar esse intervalo de tempo
             switch (this.move) {
                 case 0: 
@@ -189,6 +186,7 @@ class Monster extends Character {
             }
         // }, 2.0*500);
     }
+
     // Method to cause damage to the player if it is colliding with one or plus monster(s)
     causeDamage() {
         console.log('COMBATE', player.health, this.health); //---------------------------DEBUGGER
@@ -198,26 +196,27 @@ class Monster extends Character {
 }
 
 
-// DERIVED CLASS: 
+// DERIVED CLASS: to instantiate a rat and its attributes
 class Rat extends Monster {
-    constructor(coordX, coordY, width, height, health, image, strength) {
-        super(coordX, coordY, width, height, health, image, strength, 250);
+    constructor(coordX, coordY) {
+        // 'super-requirement-order': coordX, coordY, width, height, health, image, strength, yieldExperience
+        super(coordX, coordY, 70, 70, 20, monster1Img, 3, 250); // (monster#Img comes from 'sprites.js')
     }
-
 }
 
-
-//  DERIVED CLASS: 
+//  DERIVED CLASS: to instantiate a dragon and its attributes 
 class Dragon extends Monster {
-    constructor(coordX, coordY, width, height, health, image, strength) {
-        super(coordX, coordY, width, height, health, image, strength, 500);
+    constructor(coordX, coordY) {
+        // 'super-requirement-order': coordX, coordY, width, height, health, image, strength, yieldExperience
+        super(coordX, coordY, 70, 70, 50, monster2Img, 7, 500);
     }
 }
 
-//  DERIVED CLASS: 
+//  DERIVED CLASS: to instantiate a demon and its attributes
 class Demon extends Monster {
-    constructor(coordX, coordY, width, height, health, image, strength) {
-        super(coordX, coordY, width, height, health, image, strength, 100);
+    constructor(coordX, coordY) {
+        // 'super-requirement-order': coordX, coordY, width, height, health, image, strength, yieldExperience
+        super(coordX, coordY, 70, 70, 100, monster3Img, 15, 1000);
     }
 }
 
@@ -228,9 +227,10 @@ class HealthBar {
         this.coordX = coordX;
         this.coordY = coordY;
         this.color = color;
+        this.maxHealth = maxHealth;
+        
         this.width = 50;
         this.height = 10;
-        this.maxHealth = maxHealth;
         this.currentHealth = this.width; // rep
     }
  
