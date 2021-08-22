@@ -125,6 +125,13 @@ window.onload = () => {
         }
     });
 
+    // LISTENER: waiting for the 'click' command from the mouse, to attack
+    canvas.addEventListener('click', (event) => {
+        let clickedX = event.pageX - canvas.offsetLeft + canvas.clientLeft;
+        let clickedY = event.pageY - canvas.offsetTop + canvas.clientTop;
+        player.attack(clickedX, clickedY);
+    });
+
     menu(); 
 }
 

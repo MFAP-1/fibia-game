@@ -1,7 +1,7 @@
 // Fibia, the game: class file
 
 
-//
+// BASE CLASS: to define attributes and methods for a generic character (player or monster) 
 class Character {
     constructor(coordX, coordY, width, height, health, image, strength) {
         this.coordX = coordX;
@@ -15,7 +15,7 @@ class Character {
         this.alive = true;
     }
 
-    // Updating the sprite
+    // Method to update the sprite of any given character
     update() {
         context.drawImage(this.image, this.coordX, this.coordY, this.width, this.height);
     }
@@ -30,14 +30,14 @@ class Character {
     
     // Method to check if there is a collision
     collisionDetection() {
-        console.log(player.surroundingMonsters); // ------------------------------DEBUGGER
+        console.log('Surrounding=',player.surroundingMonsters); // -----------------------DEBUGGER
         // first, checking collision with the wall
         let collision = (this.left() < 0 || this.right() > canvas.width || this.top() < 0 || this.bottom() > canvas.height);
         if (collision) return true; // if statement to check whether the collision has occurred
         
         // now checking collision with any given monster from the array of monsters
         for (let i = 0; i < monsters.length; i++) {
-            console.log(monsters[i]);
+            console.log('Monster #', i, ':', monsters[i]); // -----------------------DEBUGGER
             collision = (
                 this.right() > monsters[i].left() && 
                 this.left() < monsters[i].right() && 
@@ -57,7 +57,7 @@ class Character {
         return false; // if none of the testings above were true, that means: no collision! Thus, return false.
     }
     // auxiliary methods for collisionDetection
-    left() {
+    left() { 
         return this.coordX;
     }
     right() {
@@ -72,7 +72,7 @@ class Character {
 }
 
 
-//
+// SUB CLASS: to define attributes and methods for the player 
 class Player extends Character {
     constructor(coordX, coordY, health, image) {
         super(coordX, coordY, 70, 70, health, image, 15);
@@ -80,49 +80,59 @@ class Player extends Character {
         this.surroundingMonsters = [];
         this.experience = 0;
     }
-
+    // 4 Methods to move the player arround. (Checking the collision every step)
     moveUp() {
         this.coordY -= this.velocity;
-        if (this.collisionDetection()){
-            this.coordY += this.velocity; // if there was a collision with the movement, revert that movement
+        if (this.collisionDetection()){ // if there was a collision with the intended movement
+            this.coordY += this.velocity; // revert that movement
             console.log('COLISÃO 1'); // ------------------------------DEBUGGER
-            this.causeDamage();
+            this.surroundingMonsters.forEach(monster => { monster.causeDamage(); });
+        } else { // if there was no collision
+            this.surroundingMonsters = []; // clear the surrounding monsters array
         }
     }
     moveDown() {
         this.coordY += this.velocity;
         if (this.collisionDetection()){
             this.coordY -= this.velocity;
-            console.log('COLISÃO 2'); // ------------------------------DEBUGGER
-            this.causeDamage();
+            console.log('COLISÃO 2'); 
+            this.surroundingMonsters.forEach(monster => { monster.causeDamage(); });
+        } else { 
+            this.surroundingMonsters = []; 
         }
     }
     moveLeft() {
         this.coordX -= this.velocity;
         if (this.collisionDetection()){
             this.coordX += this.velocity;
-            console.log('COLISÃO 3'); // ------------------------------DEBUGGER
-            this.causeDamage();
+            console.log('COLISÃO 3'); 
+            this.surroundingMonsters.forEach(monster => { monster.causeDamage(); });
+        } else { 
+            this.surroundingMonsters = []; 
         }
     }
     moveRight() {
         this.coordX += this.velocity;
         if (this.collisionDetection()){
             this.coordX -= this.velocity;
-            console.log('COLISÃO 4'); // ------------------------------DEBUGGER
-            this.causeDamage();
+            console.log('COLISÃO 4'); 
+            this.surroundingMonsters.forEach(monster => { monster.causeDamage(); });
+        } else { 
+            this.surroundingMonsters = []; 
         }
     }
-    causeDamage() {
-        if (player.surroundingMonsters.length > 0) { // avoiding calling it for the wall
-            console.log('COMBATE', player.health, player.surroundingMonsters[0].health); //---------------------------DEBUGGER
-            player.health -= player.surroundingMonsters[0].strength;
-            player.surroundingMonsters[0].health -= player.strength;
-            setInterval(player.causeDamage, 2000); // every two second it will cause damage   
-        }
-    }
+    // causeDamage() {
+    //     if (player.surroundingMonsters.length > 0) { // avoiding calling it for the wall
+    //         console.log('COMBATE', player.health, player.surroundingMonsters[0].health); //------------------------DEBUGGER
+    //         player.health -= player.surroundingMonsters[0].strength;
+    //         player.surroundingMonsters[0].health -= player.strength;
+    //         setInterval(player.causeDamage, 2000); // every two second it will cause damage   
+    //     }
+    // }
+
+    // 
     levelUp() {
-        const experienceTable = [1000, 2050, 4200, 8600, 17600];
+        const experienceTable = [1000, 2050, 4200, 8600, 17600]; // pre-defined amounts of experience required for leveling up
         for (let i = 0; i < experienceTable.length; i++) {
             if (this.experience > experienceTable[i]){
                 this.level = i + 2; // +2 cause in the 0 index is the level up from lvl 1 to 2. and so on.
@@ -132,11 +142,23 @@ class Player extends Character {
         const levelDisplayElement = document.querySelector('div span');
         levelDisplayElement.innerHTML = this.level;
     }
+
+    // 
+    attack(clickedX, clickedY) {
+        console.log('player is attacking (!!). He clicked at x: ', clickedX, '/ y: ',clickedY);//---------------------DEBUGGER
+        // for meele attack, check if the clicked monster is surrounding the player
+        this.surroundingMonsters.forEach(monster => {
+            if ((clickedX >= monster.coordX && clickedX <= monster.coordX + monster.width) &&
+                (clickedY >= monster.coordY && clickedY <= monster.coordY + monster.height)) {
+                    monster.health -= player.strength;
+                }
+        });
+    }
 }
 
 // let counter = 0;
 
-//
+// SUB CLASS (INTERMEDIATE CLASS): to define attributes and methods for a generic monster 
 class Monster extends Character {
     constructor(coordX, coordY, width, height, health, image, strength, yieldExperience) {
         super(coordX, coordY, width, height, health, image, strength);
@@ -167,10 +189,16 @@ class Monster extends Character {
             }
         // }, 2.0*500);
     }
+    // Method to cause damage to the player if it is colliding with one or plus monster(s)
+    causeDamage() {
+        console.log('COMBATE', player.health, this.health); //---------------------------DEBUGGER
+        player.health -= this.strength;
+        //setInterval(this.causeDamage, 2000); // every two second it will cause damage   
+    }
 }
 
 
-//
+// DERIVED CLASS: 
 class Rat extends Monster {
     constructor(coordX, coordY, width, height, health, image, strength) {
         super(coordX, coordY, width, height, health, image, strength, 250);
@@ -179,21 +207,22 @@ class Rat extends Monster {
 }
 
 
-//
+//  DERIVED CLASS: 
 class Dragon extends Monster {
     constructor(coordX, coordY, width, height, health, image, strength) {
         super(coordX, coordY, width, height, health, image, strength, 500);
     }
 }
 
-//
+//  DERIVED CLASS: 
 class Demon extends Monster {
     constructor(coordX, coordY, width, height, health, image, strength) {
         super(coordX, coordY, width, height, health, image, strength, 100);
     }
 }
 
-// Class for a generic health bar
+
+// BASE CLASS: for a generic health bar
 class HealthBar {
     constructor(coordX, coordY, color, maxHealth) {
         this.coordX = coordX;
