@@ -164,13 +164,6 @@ function monsterGenerator() {
         } 
     }    
 }
-// Manually inserting random monsters (LATER CREATE A FUNCTION FOR THAT)
-// monsters.push(new Rat(randomCoord(), randomCoord(), 70, 70, 20, monster1Img, 3));
-// monsters.push(new Rat(randomCoord(), randomCoord(), 70, 70, 20, monster1Img, 3));
-// monsters.push(new Rat(randomCoord(), randomCoord(), 70, 70, 20, monster1Img, 3));
-// monsters.push(new Dragon(randomCoord(), randomCoord(), 70, 70, 50, monster2Img, 7));
-
-
 
 // AUX-FUNCTION: To randomize a coordinate (considering the size of any given character = 70x70)
 function randomCoord() {
@@ -187,37 +180,36 @@ function overlappingMonster() {
     for (let i = 0; i < monsters.length; i++) { // outer loop: to check every element on the monsters array
         console.log('Current comparing monster: ', monsters[i]);  //--------------------------------------DEBUGGER
         // checking against the player sprite
-        if (
-            (monsters[i].right() >= player.left()) &&  // TROCAR AQUI PRA TOP() BOTTOM() LEFT() RIGHT()???
-            (monsters[i].left() <= player.right()) &&
-            (monsters[i].top() <= player.bottom()) && 
-            (monsters[i].bottom() >= player.top())) {
-                return true; // stops function and return true when one overlap is found
+        if (clashIdentifier(monsters[i], player)) {
+            return true; // stops function and return true when one overlap is found
         }
 
         // checking against the graves sprites
         graves.forEach(grave => {
-            if (
-                (monsters[i].right() >= grave.left()) &&  // TROCAR AQUI PRA TOP() BOTTOM() LEFT() RIGHT()???
-                (monsters[i].left() <= grave.right()) &&
-                (monsters[i].top() <= grave.bottom()) && 
-                (monsters[i].bottom() >= grave.top())) {
-                    return true; // stops function and return true when one overlap is found
+            if (clashIdentifier(monsters[i], grave)) {
+                return true; // stops function and return true when one overlap is found
             }
         });
 
         // checking against live monsters
         for (let j = i + 1; j < monsters.length; j++) { // 
-            if (
-            (monsters[i].right() >= monsters[j].left()) &&  // TROCAR AQUI PRA TOP() BOTTOM() LEFT() RIGHT()???
-            (monsters[i].left() <= monsters[j].right()) &&
-            (monsters[i].top() <= monsters[j].bottom()) && 
-            (monsters[i].bottom() >= monsters[j].top())) {
+            if (clashIdentifier(monsters[i], monsters[j])) {
                 console.log('!!!entrou no IF DA FUNCÇÃO DE CHECKAR!!!');  //--------------------------------------DEBUGGER
                 return true; // stops function and return true when one overlap is found
             }
         }
-        
     }
     return false; // false means no overlapping
+}
+
+// AUX-FUNCTION: to identify a clash between two generic (rectangular) elements
+function clashIdentifier(elementA, elementB) {
+    if (
+    (elementA.right() >= elementB.left()) && 
+    (elementA.left() <= elementB.right()) &&
+    (elementA.top() <= elementB.bottom()) && 
+    (elementA.bottom() >= elementB.top())) {
+        return true; // clash identified
+    }
+    return false; // no clash
 }

@@ -20,7 +20,7 @@ class Character {
         context.drawImage(this.image, this.coordX, this.coordY, this.width, this.height);
     }
 
-    // checking if the character is dead 
+    // Method to check if the character is dead 
     checkDeath() {
         if (this.health <= 0) {
             this.alive = false;
@@ -32,19 +32,14 @@ class Character {
     collisionDetection() {
         console.log('Surrounding=',player.surroundingMonsters); // -----------------------DEBUGGER
         // first, checking collision with the wall
-        let collision = (this.left() < 0 || this.right() > canvas.width || this.top() < 0 || this.bottom() > canvas.height);
+        let collision = (this.left() <= 0 || this.right() >= canvas.width || this.top() <= 0 || this.bottom() >= canvas.height);
         if (collision) return true; // if statement to check whether the collision has occurred
         
         // now checking collision with any given monster from the array of monsters
         for (let i = 0; i < monsters.length; i++) {
             console.log('Monster #', i, ':', monsters[i]); // -----------------------DEBUGGER
-            collision = (
-                this.right() > monsters[i].left() && 
-                this.left() < monsters[i].right() && 
-                this.top() < monsters[i].bottom() && 
-                this.bottom() > monsters[i].top());
-            if (collision) { // if statement to check whether the collision has occurred
-                // For loop the check if the current colliding element is already in the array
+            if (clashIdentifier(player, monsters[i])) { // if statement to check whether the collision has occurred
+                // For loop the check if the current colliding monster is already in the player's array of surrounding
                 for (let j = 0; j < player.surroundingMonsters.length; j++) {
                     if (player.surroundingMonsters[j] === monsters[i]) {
                         return true;
@@ -56,7 +51,8 @@ class Character {
         }
         return false; // if none of the testings above were true, that means: no collision! Thus, return false.
     }
-    // auxiliary methods for collisionDetection
+
+    // auxiliary methods for collisionDetection() and clashIdentifier()
     left() { 
         return this.coordX;
     }
