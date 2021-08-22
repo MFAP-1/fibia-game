@@ -184,12 +184,35 @@ function randomCoord() {
 
 // AUX-FUNCTION: To check the monster overlapping each other when generating a new one
 function overlappingMonster() {
-    for (let i = 0; i < monsters.length - 1; i++) { // 
+    for (let i = 0; i < monsters.length; i++) { // outer loop: to check every element on the monsters array
         console.log('Current comparing monster: ', monsters[i]);  //--------------------------------------DEBUGGER
+        // checking against the player sprite
+        if (
+            (monsters[i].right() >= player.left()) &&  // TROCAR AQUI PRA TOP() BOTTOM() LEFT() RIGHT()???
+            (monsters[i].left() <= player.right()) &&
+            (monsters[i].top() <= player.bottom()) && 
+            (monsters[i].bottom() >= player.top())) {
+                return true; // stops function and return true when one overlap is found
+        }
+
+        // checking against the graves sprites
+        graves.forEach(grave => {
+            if (
+                (monsters[i].right() >= grave.left()) &&  // TROCAR AQUI PRA TOP() BOTTOM() LEFT() RIGHT()???
+                (monsters[i].left() <= grave.right()) &&
+                (monsters[i].top() <= grave.bottom()) && 
+                (monsters[i].bottom() >= grave.top())) {
+                    return true; // stops function and return true when one overlap is found
+            }
+        });
+
+        // checking against live monsters
         for (let j = i + 1; j < monsters.length; j++) { // 
             if (
-            (monsters[i].coordX >= monsters[j].coordX && monsters[i].coordX <= monsters[j].coordX + monsters[j].width) &&
-            (monsters[i].coordY >= monsters[i].coordY && monsters[i].coordY <= monsters[j].coordY + monsters[j].height)) {
+            (monsters[i].right() >= monsters[j].left()) &&  // TROCAR AQUI PRA TOP() BOTTOM() LEFT() RIGHT()???
+            (monsters[i].left() <= monsters[j].right()) &&
+            (monsters[i].top() <= monsters[j].bottom()) && 
+            (monsters[i].bottom() >= monsters[j].top())) {
                 console.log('!!!entrou no IF DA FUNCÇÃO DE CHECKAR!!!');  //--------------------------------------DEBUGGER
                 return true; // stops function and return true when one overlap is found
             }
