@@ -7,19 +7,19 @@ class Game {
         this.animationId;
     }
 
-    // Method: render the main menu screen
+    // Method to render the main menu screen
     menu () {
         context.font = '30px serif';
         context.fillStyle = 'black';
         context.fillText('PRESS ENTER TO PLAY.', 170, 350);
     }
 
-    // Method: To clear the canvas
+    // Method to To clear the canvas
     clearCanvas() {
         context.clearRect(0, 0, canvas.width, canvas.height);
     }
 
-    // Method: To terminate the game 
+    // Method to render the game over screen
     gameOver() {
         this.clearCanvas();
         context.font = '30px serif';
@@ -27,7 +27,7 @@ class Game {
         context.fillText('GAME OVER :(', 300, 350);
     }
 
-    // Method: To manage the combat actions and
+    // Method To manage the combat actions and
     combatManager() {
         if (game.frames % 60 === 0) { // every 60 frames (1 seconds if 60fps)
             // player receiving dmg every iteration for every monsters in its surroundings
@@ -64,30 +64,6 @@ class Character {
         }
     }
     
-    // Method to check if there is a collision
-    collisionDetection() {
-        console.log('Surrounding=',player.surroundingMonsters); // -----------------------DEBUGGER
-        // first, checking collision with the wall
-        let collision = (this.left() <= 0 || this.right() >= canvas.width || this.top() <= 0 || this.bottom() >= canvas.height);
-        if (collision) return true; // if statement to check whether the collision has occurred
-        
-        // now checking collision with any given monster from the array of monsters
-        for (let i = 0; i < monsters.length; i++) {
-            //console.log('Monster #', i, ':', monsters[i]); // -----------------------DEBUGGER
-            if (clashIdentifier(player, monsters[i])) { // if statement to check whether the collision has occurred
-                // For loop the check if the current colliding monster is already in the player's array of surrounding
-                for (let j = 0; j < player.surroundingMonsters.length; j++) {
-                    if (player.surroundingMonsters[j] === monsters[i]) {
-                        return true;
-                    }
-                }
-                player.surroundingMonsters.push(monsters[i]); // if it doesn't exist, push it
-                monsters[i].combat = true; // updating the status of the monster to true for the combat
-                return true; 
-            }
-        }
-        return false; // if none of the testings above were true, that means: no collision! Thus, return false.
-    }
 
     // auxiliary methods for collisionDetection() and clashIdentifier()
     left() { 
@@ -118,7 +94,7 @@ class Player extends Character {
     // 4 Methods to move the player arround. (Checking the collision every step)
     moveUp() {
         this.coordY -= this.velocity;
-        if (this.collisionDetection()) { // if there was a collision with the intended movement
+        if (this.playerCollisionDetection()) { // if there was a collision with the intended movement
             this.coordY += this.velocity; // revert that movement
         } else { // if there was no collision
             this.surroundingMonsters.forEach(monster => { monster.combat = false; }); // if there was a surrounding monster, set its combat to false
@@ -127,7 +103,7 @@ class Player extends Character {
     }
     moveDown() {
         this.coordY += this.velocity;
-        if (this.collisionDetection()) {
+        if (this.playerCollisionDetection()) {
             this.coordY -= this.velocity;
         } else { 
             this.surroundingMonsters.forEach(monster => { monster.combat = false; });
@@ -136,7 +112,7 @@ class Player extends Character {
     }
     moveLeft() {
         this.coordX -= this.velocity;
-        if (this.collisionDetection()) {
+        if (this.playerCollisionDetection()) {
             this.coordX += this.velocity;
         } else { 
             this.surroundingMonsters.forEach(monster => { monster.combat = false; });
@@ -145,12 +121,37 @@ class Player extends Character {
     }
     moveRight() {
         this.coordX += this.velocity;
-        if (this.collisionDetection()) {
+        if (this.playerCollisionDetection()) {
             this.coordX -= this.velocity;
         } else { 
             this.surroundingMonsters.forEach(monster => { monster.combat = false; });
             this.surroundingMonsters = []; 
         }
+    }
+
+    // Method to check if there is a collision (triggered by the player)
+    playerCollisionDetection() {
+        console.log('Surrounding (triggered by player)=',player.surroundingMonsters); // -----------------------DEBUGGER
+        // first, checking collision with the wall
+        let collision = (this.left() <= 0 || this.right() >= canvas.width || this.top() <= 0 || this.bottom() >= canvas.height);
+        if (collision) return true; // if statement to check whether the collision has occurred
+        
+        // now checking collision with any given monster from the array of monsters
+        for (let i = 0; i < monsters.length; i++) {
+            //console.log('Monster #', i, ':', monsters[i]); // -----------------------DEBUGGER
+            if (clashIdentifier(player, monsters[i])) { // if statement to check whether the collision has occurred
+                // For loop the check if the current colliding monster is already in the player's array of surrounding
+                for (let j = 0; j < player.surroundingMonsters.length; j++) {
+                    if (player.surroundingMonsters[j] === monsters[i]) {
+                        return true;
+                    }
+                }
+                player.surroundingMonsters.push(monsters[i]); // if it doesn't exist, push it
+                monsters[i].combat = true; // updating the status of the monster to true for the combat
+                return true; 
+            }
+        }
+        return false; // if none of the testings above were true, that means: no collision! Thus, return false.
     }
     
     // 
@@ -192,6 +193,7 @@ class Monster extends Character {
         this.moveDirection = 0; // 0 - up, 1- down, 2- left, 3- right and 4-do not move
     }
 
+    // Method to randomize 
     randomMovement() {
         // This will happend every 120 frames (2 seconds if 60fps) and if the monster isn't in combat
         if (game.frames % 120 === 0 && this.combat === false) { 
@@ -200,25 +202,25 @@ class Monster extends Character {
             switch (this.moveDirection) {  // switch statement to check the move direction and then move it
                 case 0: // up
                     this.coordY -= this.velocity;
-                    if (this.collisionDetection()) { // if there was a collision with the intended movement
+                    if (this.monsterCollisionDetection()) { // if there was a collision with the intended movement
                         this.coordY += this.velocity; // revert that movement
                     }
                     break;
                 case 1: // down
                     this.coordY += this.velocity;
-                    if (this.collisionDetection()) { // if there was a collision with the intended movement
+                    if (this.monsterCollisionDetection()) { // if there was a collision with the intended movement
                         this.coordY -= this.velocity; // revert that movement
                     }
                     break;
                 case 2: // left
                     this.coordX -= this.velocity;
-                    if (this.collisionDetection()) { // if there was a collision with the intended movement
+                    if (this.monsterCollisionDetection()) { // if there was a collision with the intended movement
                         this.coordX += this.velocity; // revert that movement
                     }
                     break;
                 case 3: // right
                     this.coordX += this.velocity;
-                    if (this.collisionDetection()) { // if there was a collision with the intended movement
+                    if (this.monsterCollisionDetection()) { // if there was a collision with the intended movement
                         this.coordX -= this.velocity; // revert that movement
                     }
                     break;
@@ -232,6 +234,31 @@ class Monster extends Character {
     causeDamage() {
         player.health -= this.strength; 
         console.log('COMBATE (monstro atacando):', player.health, this.health); //---------------------------DEBUGGER
+    }
+
+    // Method to check if there is a collision (triggered by a monster)
+    monsterCollisionDetection() {
+        console.log('Surrounding (triggered by monster)=',player.surroundingMonsters); // -----------------------DEBUGGER
+        // first, checking collision with the wall
+        let collision = (this.left() <= 0 || this.right() >= canvas.width || this.top() <= 0 || this.bottom() >= canvas.height);
+        if (collision) return true; // if statement to check whether the collision has occurred
+        
+        // checking against the player sprite
+        if (clashIdentifier(this, player)) {
+            player.surroundingMonsters.push(this); // if it doesn't exist, push it
+            this.combat = true; // updating the status of the monster to true for the combat
+            return true; // stops function and return true 
+        }
+
+        // now checking collision with other monsters from the array of monsters
+        for (let i = 0; i < monsters.length; i++) {
+            for (let j = i + 1; j < monsters.length; j++) {
+                if (clashIdentifier(monsters[i], monsters[j])) { // if statement to check whether the collision has occurred
+                    return true;
+                }
+            }
+        }
+        return false; // if none of the testings above were true, that means: no collision! Thus, return false.
     }
 }
 
