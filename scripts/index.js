@@ -22,33 +22,33 @@ const graves = [];
 game.menu(); 
 
     
-// MAIN-FUNCTION: to update game's screen
+// MAIN-FUNCTION: to update the game's screen
 const updateGame = () => {
     game.clearCanvas();
     
-    game.frames++;
+    game.frames++; // couting the frames
 
     // updating the sprite of the player (if the player still alive)
     if (!player.checkDeath()) {
         player.updateSprite();
         playerHealthBar.updateHealthBar(player.coordX, player.coordY, player.health);
-        player.levelUp();
     }
 
     // updating the sprite of all the monsters
     for (let i = 0; i < monsters.length; i++) {
         if (!monsters[i].checkDeath()) { // if the monster still alive, update it
             monsters[i].updateSprite();
-            monstersHealthBar[i].updateHealthBar(monsters[i].coordX, monsters[i].coordY, monsters[i].health);
-        // when the monster is dead
-        } else { 
+            monstersHealthBar[i].updateHealthBar(monsters[i].coordX, monsters[i].coordY, monsters[i].health);   
+        } else { // if the monster is dead, do:
             console.log('monster morreu'); //--------------------------------------DEBUGGER
-            // inserting a gravestone
-            monsters[i].image = grave;
+            // inserting a gravestone to its array
+            monsters[i].image = graveImg;
             graves.push(monsters[i]);
-            if (graves.length > 2) graves.shift(); // the keep the count of displayed graves up to 2 at the time
+            // to keep the count of displayed graves up to 2 at the time
+            if (graves.length > 2) graves.shift(); // remove the first in the array
             // increase experience for the player
             player.experience += monsters[i].yieldExperience;
+            player.levelUp(); // checking to update its level
             // removing the monster from the array and from the players surrounding
             monsters.splice(i, 1);
             monstersHealthBar.splice(i, 1);
@@ -61,7 +61,7 @@ const updateGame = () => {
         graves[i].updateSprite();
     }
 
-    // To 
+    // 
     game.combatManager();
     
     // moving the monters to a random position
@@ -72,8 +72,9 @@ const updateGame = () => {
     
     // Checking the loss condition of the game (if the player still alive)
     if (!player.alive) {
-        cancelAnimationFrame(this.animationId);
-        game.gameOver();
+        cancelAnimationFrame(game.animationId);
+        game.gameOver(); // render gaveOver screen
+        return; // to stop this loop (updateGame() main-function)
     }
 
     // Scheduling updates to the canvas (recursive function)

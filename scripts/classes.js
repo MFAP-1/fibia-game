@@ -29,7 +29,7 @@ class Game {
 
     // Method: To manage the combat actions and
     combatManager() {
-        if (game.frames % 120 === 0) { // every 120 frames (2 seconds if 60fps)
+        if (game.frames % 60 === 0) { // every 60 frames (1 seconds if 60fps)
             // player receiving dmg every iteration for every monsters in its surroundings
             player.surroundingMonsters.forEach(monster => { monster.causeDamage(); });
         }   
@@ -174,6 +174,7 @@ class Player extends Character {
             if ((clickedX >= monster.coordX && clickedX <= monster.coordX + monster.width) &&
                 (clickedY >= monster.coordY && clickedY <= monster.coordY + monster.height)) {
                     monster.health -= player.strength;
+                    console.log('COMBATE (player atacando):', player.health, monster.health); //------------------------DEBUGGER
             }
         });
     }
@@ -186,8 +187,8 @@ class Monster extends Character {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity
         super(coordX, coordY, width, height, image, health, strength, velocity);
 
-        this.yieldExperience = yieldExperience;
-        this.combat = false;
+        this.yieldExperience = yieldExperience; // amount of experience that it will yield to the player after
+        this.combat = false; // not in combat
         this.moveDirection = 0; // 0 - up, 1- down, 2- left, 3- right and 4-do not move
     }
 
@@ -229,8 +230,8 @@ class Monster extends Character {
 
     // Method to cause damage to the player if it is colliding with one or plus monster(s)
     causeDamage() {
-        console.log('COMBATE', player.health, this.health); //---------------------------DEBUGGER
         player.health -= this.strength; 
+        console.log('COMBATE (monstro atacando):', player.health, this.health); //---------------------------DEBUGGER
     }
 }
 
