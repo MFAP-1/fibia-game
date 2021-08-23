@@ -1,4 +1,4 @@
-// Fibia, the game: sprites file
+// Fibia, the game: sprites js file
 
 // Player's sprite
 let playerImg = new Image();

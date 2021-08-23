@@ -173,6 +173,7 @@ class Player extends Character {
         this.surroundingMonsters.forEach(monster => {
             if ((clickedX >= monster.coordX && clickedX <= monster.coordX + monster.width) &&
                 (clickedY >= monster.coordY && clickedY <= monster.coordY + monster.height)) {
+                    engageCombatSound.play();
                     monster.health -= player.strength;
                     console.log('COMBATE (player atacando):', player.health, monster.health); //------------------------DEBUGGER
             }
@@ -230,6 +231,7 @@ class Monster extends Character {
     // Method to cause damage to the player if it is colliding with one or plus monster(s)
     causeDamage() {
         player.health -= this.strength; 
+        this.sound.play();
         console.log('COMBATE (monstro atacando):', player.health, this.health); //---------------------------DEBUGGER
     }
 
@@ -265,6 +267,7 @@ class Rat extends Monster {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience
         super(coordX, coordY, 70, 70, monster1Img, 20, 3, 30, 250); // (monster#Img comes from 'sprites.js')
+        this.sound = ratAttackSound;
     }
 }
 
@@ -273,6 +276,7 @@ class Dragon extends Monster {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience
         super(coordX, coordY, 70, 70, monster2Img, 50, 7, 40, 500);
+        this.sound = dragonAttackSound;
     }
 }
 
@@ -281,6 +285,7 @@ class Demon extends Monster {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience
         super(coordX, coordY, 70, 70,  monster3Img, 100, 15, 60, 1000);
+        this.sound = demonAttackSound;
     }
 }
 

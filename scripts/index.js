@@ -22,6 +22,7 @@ const graves = [];
 game.menu(); 
 
 
+
 // MAIN-FUNCTION: to update the game's screen
 const updateGame = () => {
     game.clearCanvas();
@@ -110,6 +111,7 @@ window.onload = () => {
     document.addEventListener('keyup', (event) => {
         if (event.keyCode === 13) { // enter
             updateGame();
+            backgroundSound.play(); // playing the background music
         }
     });
 
