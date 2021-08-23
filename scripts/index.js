@@ -3,7 +3,9 @@
 // Instatiating the canvas
 const canvas = document.getElementById('the-canvas');
 const context = canvas.getContext("2d");
-let intervalId = 0;
+
+// Instatiating the game object
+const game = new Game();
 
 // Instatiating the player object (playerImg comes from 'sprites.js')
 const player = new Player(canvas.width/2, canvas.height/2);
@@ -16,61 +18,72 @@ const monstersHealthBar = []; // Instatiating one array for storing all monsters
 // Instatiating the graves array
 const graves = [];
 
-
-// MAIN FUNCTION: Waiting for the screen to load.
-window.onload = () => {
-
-    // FUNCTION: to print the screen
-    const draw = () => {
-        clearCanvas();
-        
-        // updating the sprite of the player (if the player still alive)
-        if (!player.checkDeath()) {
-            player.update();
-            playerHealthBar.updateHealthBar(player.coordX, player.coordY, player.health);
-            player.levelUp();
-        }
-        
-        // updating the sprite of all the monsters
-        for (let i = 0; i < monsters.length; i++) {
-            if (!monsters[i].checkDeath()) { // if the monster still alive, update it
-                monsters[i].update();
-                monstersHealthBar[i].updateHealthBar(monsters[i].coordX, monsters[i].coordY, monsters[i].health);
-                // setTimeout(monsters[i].randomMovement(), 2.0*1000);
-                // monsters[i].randomMovement();
-            // when the monster is dead
-            } else { 
-                console.log('monster morreu'); //--------------------------------------DEBUGGER
-                // inserting a gravestone
-                monsters[i].image = grave;
-                graves.push(monsters[i]);
-                if (graves.length > 2) graves.shift(); // the keep the count of displayed graves up to 2 at the time
-                // increase experience for the player
-                player.experience += monsters[i].yieldExperience;
-                // removing the monster from the array and from the players surrounding
-                monsters.splice(i, 1);
-                monstersHealthBar.splice(i, 1);
-                player.surroundingMonsters.splice(0, 1);
-            }
-        }
-
-        // updating the sprites of all the graves (if any) 
-        for (let i = 0; i < graves.length; i++) {
-            graves[i].update();
-        }
-        
-        // Generating monsters on the screen
-        monsterGenerator();
-
-        // Checking the loss condition of the game (if the player still alive)
-        if (!player.alive) gameOver();
-
-        // Scheduling updates to the canvas (recursive function)
-        intervalId = setInterval(draw, 16); 
-        //console.log('rodando'); //--------------------------------------DEBUGGER
-    }
+// calling the first method of the game. The menu screen
+game.menu(); 
 
     
+// MAIN-FUNCTION: to update game's screen
+const updateGame = () => {
+    game.clearCanvas();
+    
+    game.frames++;
+
+    // updating the sprite of the player (if the player still alive)
+    if (!player.checkDeath()) {
+        player.updateSprite();
+        playerHealthBar.updateHealthBar(player.coordX, player.coordY, player.health);
+        player.levelUp();
+    }
+
+    // updating the sprite of all the monsters
+    for (let i = 0; i < monsters.length; i++) {
+        if (!monsters[i].checkDeath()) { // if the monster still alive, update it
+            monsters[i].updateSprite();
+            monstersHealthBar[i].updateHealthBar(monsters[i].coordX, monsters[i].coordY, monsters[i].health);
+        // when the monster is dead
+        } else { 
+            console.log('monster morreu'); //--------------------------------------DEBUGGER
+            // inserting a gravestone
+            monsters[i].image = grave;
+            graves.push(monsters[i]);
+            if (graves.length > 2) graves.shift(); // the keep the count of displayed graves up to 2 at the time
+            // increase experience for the player
+            player.experience += monsters[i].yieldExperience;
+            // removing the monster from the array and from the players surrounding
+            monsters.splice(i, 1);
+            monstersHealthBar.splice(i, 1);
+            player.surroundingMonsters.splice(0, 1);
+        }
+    }
+
+    // updating the sprites of all the graves (if any) 
+    for (let i = 0; i < graves.length; i++) {
+        graves[i].updateSprite();
+    }
+
+    // IMPORTANT MANIPULATION OF THE FRAMES
+    if (game.frames % 120 === 0) { // every 2 seconds
+        monsters.forEach(monster => {
+            monster.randomMovement();
+        });
+    }   
+    
+    // Generating monsters on the screen
+    monsterGenerator();
+    
+    // Checking the loss condition of the game (if the player still alive)
+    if (!player.alive) {
+        cancelAnimationFrame(this.animationId);
+        game.gameOver();
+    }
+
+    // Scheduling updates to the canvas (recursive function)
+    game.animationId = requestAnimationFrame(updateGame);
+    //console.log('rodando'); //--------------------------------------DEBUGGER
+}
+
+// FUNCTION: Waiting for the screen to load.
+window.onload = () => {    
     // LISTENER: tracking the moviment keys for the player
     document.addEventListener('keyup', (event) => {
         switch (event.keyCode) {
@@ -97,7 +110,7 @@ window.onload = () => {
     // LISTENER: waiting for the 'ENTER' command on the menu, to start
     document.addEventListener('keyup', (event) => {
         if (event.keyCode === 13) { // enter
-            draw();
+            updateGame();
         }
     });
 
@@ -109,33 +122,13 @@ window.onload = () => {
         let clickedY = event.pageY - canvas.offsetTop + canvas.clientTop;
         player.attack(clickedX, clickedY);
     });
-
-    menu(); // calling the first function of the game. The menu screen
 }
 
 
-// FUNCTION: main menu screen
-const menu = () => {
-    context.font = '30px serif';
-    context.fillStyle = 'black';
-    context.fillText('PRESS ENTER TO PLAY.', 170, 350);
-}
-
-
-// FUNCTION: To terminate the game 
-const gameOver = () => {
-    clearCanvas();
-    clearInterval(intervalId);
-    context.font = '30px serif';
-    context.fillStyle = 'black';
-    context.fillText('GAME OVER :(', 300, 350);
-}
-
-
-// AUX-FUNCTION: To clear the canvas
-const clearCanvas = () => {
-    context.clearRect(0, 0, canvas.width, canvas.height);
-}
+//
+// function startGame() {
+//     updateGame();
+// }
 
 
 /* 

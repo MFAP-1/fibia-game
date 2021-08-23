@@ -1,5 +1,33 @@
 // Fibia, the game: class file
 
+// BASE CLASS: game
+class Game {
+    constructor() {
+        this.frames = 0;
+        this.animationId;
+    }
+
+    // Method: render the main menu screen
+    menu () {
+        context.font = '30px serif';
+        context.fillStyle = 'black';
+        context.fillText('PRESS ENTER TO PLAY.', 170, 350);
+    }
+
+    // Method: To clear the canvas
+    clearCanvas() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // Method: To terminate the game 
+    gameOver() {
+        this.clearCanvas();
+        context.font = '30px serif';
+        context.fillStyle = 'black';
+        context.fillText('GAME OVER :(', 300, 350);
+    }
+}
+
 
 // BASE CLASS: to define attributes and methods for a generic character (player or monster) 
 class Character {
@@ -11,12 +39,12 @@ class Character {
         this.health = health;
         this.image = image;
         this.strength = strength;
-        this.velocity = 20;
+        this.velocity = 30;
         this.alive = true;
     }
 
     // Method to update the sprite of any given character
-    update() {
+    updateSprite() {
         context.drawImage(this.image, this.coordX, this.coordY, this.width, this.height);
     }
 
@@ -146,7 +174,6 @@ class Player extends Character {
     }
 }
 
-// let counter = 0; // -----------------------DEBUGGER
 
 // SUB CLASS (INTERMEDIATE CLASS): to define attributes and methods for a generic monster 
 class Monster extends Character {
@@ -159,35 +186,30 @@ class Monster extends Character {
     }
 
     randomMovement() {
-        // counter++; // -----------------------DEBUGGER
-        // console.log(counter); // -----------------------DEBUGGER
-        // setTimeout( () => { // verificar a melhor forma de dar esse intervalo de tempo
-            switch (this.move) {
-                case 0: 
-                    this.coordY -= this.velocity / 10;
-                    this.move = Math.floor(Math.random() * 4);
-                    break;
-                case 1:
-                    this.coordY += this.velocity / 10;
-                    this.move = Math.floor(Math.random() * 4);
-                    break;
-                case 2: 
-                    this.coordX -= this.velocity / 10;
-                    this.move = Math.floor(Math.random() * 4);
-                    break;
-                case 3: 
-                    this.coordX += this.velocity / 10;
-                    this.move = Math.floor(Math.random() * 4);
-                    break;
-            }
-        // }, 2.0*500);
+        switch (this.move) {
+            case 0: 
+                this.coordY -= this.velocity;
+                this.move = Math.floor(Math.random() * 4);
+                break;
+            case 1:
+                this.coordY += this.velocity;
+                this.move = Math.floor(Math.random() * 4);
+                break;
+            case 2: 
+                this.coordX -= this.velocity;
+                this.move = Math.floor(Math.random() * 4);
+                break;
+            case 3: 
+                this.coordX += this.velocity;
+                this.move = Math.floor(Math.random() * 4);
+                break;
+        }
     }
 
     // Method to cause damage to the player if it is colliding with one or plus monster(s)
     causeDamage() {
         console.log('COMBATE', player.health, this.health); //---------------------------DEBUGGER
-        player.health -= this.strength;
-        //setInterval(this.causeDamage, 2000); // every two second it will cause damage   
+        player.health -= this.strength; 
     }
 }
 
