@@ -26,20 +26,28 @@ class Game {
         context.fillStyle = 'black';
         context.fillText('GAME OVER :(', 300, 350);
     }
+
+    // Method: To manage the combat actions and
+    combatManager() {
+        if (game.frames % 120 === 0) { // every 120 frames (2 seconds if 60fps)
+            // player receiving dmg every iteration for every monsters in its surroundings
+            player.surroundingMonsters.forEach(monster => { monster.causeDamage(); });
+        }   
+    }
 }
 
 
 // BASE CLASS: to define attributes and methods for a generic character (player or monster) 
 class Character {
-    constructor(coordX, coordY, width, height, health, image, strength) {
+    constructor(coordX, coordY, width, height, image, health, strength, velocity) {
         this.coordX = coordX;
         this.coordY = coordY;
         this.width = width;
         this.height = height;
-        this.health = health;
         this.image = image;
+        this.health = health;
         this.strength = strength;
-        this.velocity = 30;
+        this.velocity = velocity;
         this.alive = true;
     }
 
@@ -65,7 +73,7 @@ class Character {
         
         // now checking collision with any given monster from the array of monsters
         for (let i = 0; i < monsters.length; i++) {
-            console.log('Monster #', i, ':', monsters[i]); // -----------------------DEBUGGER
+            //console.log('Monster #', i, ':', monsters[i]); // -----------------------DEBUGGER
             if (clashIdentifier(player, monsters[i])) { // if statement to check whether the collision has occurred
                 // For loop the check if the current colliding monster is already in the player's array of surrounding
                 for (let j = 0; j < player.surroundingMonsters.length; j++) {
@@ -74,6 +82,7 @@ class Character {
                     }
                 }
                 player.surroundingMonsters.push(monsters[i]); // if it doesn't exist, push it
+                monsters[i].combat = true; // updating the status of the monster to true for the combat
                 return true; 
             }
         }
@@ -99,8 +108,8 @@ class Character {
 // SUB CLASS: to define attributes and methods for the player 
 class Player extends Character {
     constructor(coordX, coordY) {
-        // 'super-requirement-order': coordX, coordY, width, height, health, image, strength
-        super(coordX, coordY, 70, 70, 150, playerImg, 15);
+        // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity
+        super(coordX, coordY, 70, 70, playerImg, 150, 15, 30);
 
         this.level = 1;
         this.surroundingMonsters = [];
@@ -111,9 +120,8 @@ class Player extends Character {
         this.coordY -= this.velocity;
         if (this.collisionDetection()) { // if there was a collision with the intended movement
             this.coordY += this.velocity; // revert that movement
-            console.log('COLISÃO 1'); // ------------------------------DEBUGGER
-            this.surroundingMonsters.forEach(monster => { monster.causeDamage(); });
         } else { // if there was no collision
+            this.surroundingMonsters.forEach(monster => { monster.combat = false; }); // if there was a surrounding monster, set its combat to false
             this.surroundingMonsters = []; // clear the surrounding monsters array
         }
     }
@@ -121,9 +129,8 @@ class Player extends Character {
         this.coordY += this.velocity;
         if (this.collisionDetection()) {
             this.coordY -= this.velocity;
-            console.log('COLISÃO 2'); 
-            this.surroundingMonsters.forEach(monster => { monster.causeDamage(); });
         } else { 
+            this.surroundingMonsters.forEach(monster => { monster.combat = false; });
             this.surroundingMonsters = []; 
         }
     }
@@ -131,9 +138,8 @@ class Player extends Character {
         this.coordX -= this.velocity;
         if (this.collisionDetection()) {
             this.coordX += this.velocity;
-            console.log('COLISÃO 3'); 
-            this.surroundingMonsters.forEach(monster => { monster.causeDamage(); });
         } else { 
+            this.surroundingMonsters.forEach(monster => { monster.combat = false; });
             this.surroundingMonsters = []; 
         }
     }
@@ -141,9 +147,8 @@ class Player extends Character {
         this.coordX += this.velocity;
         if (this.collisionDetection()) {
             this.coordX -= this.velocity;
-            console.log('COLISÃO 4'); 
-            this.surroundingMonsters.forEach(monster => { monster.causeDamage(); });
         } else { 
+            this.surroundingMonsters.forEach(monster => { monster.combat = false; });
             this.surroundingMonsters = []; 
         }
     }
@@ -177,33 +182,49 @@ class Player extends Character {
 
 // SUB CLASS (INTERMEDIATE CLASS): to define attributes and methods for a generic monster 
 class Monster extends Character {
-    constructor(coordX, coordY, width, height, health, image, strength, yieldExperience) {
-        // 'super-requirement-order': coordX, coordY, width, height, health, image, strength
-        super(coordX, coordY, width, height, health, image, strength);
+    constructor(coordX, coordY, width, height, image, health, strength, velocity, yieldExperience) {
+        // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity
+        super(coordX, coordY, width, height, image, health, strength, velocity);
 
         this.yieldExperience = yieldExperience;
-        this.move = 0; // 0 - up, 1- down, 2- left and 3- right
+        this.combat = false;
+        this.moveDirection = 0; // 0 - up, 1- down, 2- left, 3- right and 4-do not move
     }
 
     randomMovement() {
-        switch (this.move) {
-            case 0: 
-                this.coordY -= this.velocity;
-                this.move = Math.floor(Math.random() * 4);
-                break;
-            case 1:
-                this.coordY += this.velocity;
-                this.move = Math.floor(Math.random() * 4);
-                break;
-            case 2: 
-                this.coordX -= this.velocity;
-                this.move = Math.floor(Math.random() * 4);
-                break;
-            case 3: 
-                this.coordX += this.velocity;
-                this.move = Math.floor(Math.random() * 4);
-                break;
-        }
+        // This will happend every 120 frames (2 seconds if 60fps) and if the monster isn't in combat
+        if (game.frames % 120 === 0 && this.combat === false) { 
+            // Generating a new random move direciton for this iteration
+            this.moveDirection = Math.floor(Math.random() * 5);
+            switch (this.moveDirection) {  // switch statement to check the move direction and then move it
+                case 0: // up
+                    this.coordY -= this.velocity;
+                    if (this.collisionDetection()) { // if there was a collision with the intended movement
+                        this.coordY += this.velocity; // revert that movement
+                    }
+                    break;
+                case 1: // down
+                    this.coordY += this.velocity;
+                    if (this.collisionDetection()) { // if there was a collision with the intended movement
+                        this.coordY -= this.velocity; // revert that movement
+                    }
+                    break;
+                case 2: // left
+                    this.coordX -= this.velocity;
+                    if (this.collisionDetection()) { // if there was a collision with the intended movement
+                        this.coordX += this.velocity; // revert that movement
+                    }
+                    break;
+                case 3: // right
+                    this.coordX += this.velocity;
+                    if (this.collisionDetection()) { // if there was a collision with the intended movement
+                        this.coordX -= this.velocity; // revert that movement
+                    }
+                    break;
+                case 4: // do not move
+                    break;
+            }
+        } 
     }
 
     // Method to cause damage to the player if it is colliding with one or plus monster(s)
@@ -217,24 +238,24 @@ class Monster extends Character {
 // DERIVED CLASS: to instantiate a rat and its attributes
 class Rat extends Monster {
     constructor(coordX, coordY) {
-        // 'super-requirement-order': coordX, coordY, width, height, health, image, strength, yieldExperience
-        super(coordX, coordY, 70, 70, 20, monster1Img, 3, 250); // (monster#Img comes from 'sprites.js')
+        // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience
+        super(coordX, coordY, 70, 70, monster1Img, 20, 3, 30, 250); // (monster#Img comes from 'sprites.js')
     }
 }
 
-//  DERIVED CLASS: to instantiate a dragon and its attributes 
+// DERIVED CLASS: to instantiate a dragon and its attributes 
 class Dragon extends Monster {
     constructor(coordX, coordY) {
-        // 'super-requirement-order': coordX, coordY, width, height, health, image, strength, yieldExperience
-        super(coordX, coordY, 70, 70, 50, monster2Img, 7, 500);
+        // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience
+        super(coordX, coordY, 70, 70, monster2Img, 50, 7, 40, 500);
     }
 }
 
-//  DERIVED CLASS: to instantiate a demon and its attributes
+// DERIVED CLASS: to instantiate a demon and its attributes
 class Demon extends Monster {
     constructor(coordX, coordY) {
-        // 'super-requirement-order': coordX, coordY, width, height, health, image, strength, yieldExperience
-        super(coordX, coordY, 70, 70, 100, monster3Img, 15, 1000);
+        // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience
+        super(coordX, coordY, 70, 70,  monster3Img, 100, 15, 60, 1000);
     }
 }
 

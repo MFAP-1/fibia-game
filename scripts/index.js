@@ -61,13 +61,12 @@ const updateGame = () => {
         graves[i].updateSprite();
     }
 
-    // IMPORTANT MANIPULATION OF THE FRAMES
-    if (game.frames % 120 === 0) { // every 2 seconds
-        monsters.forEach(monster => {
-            monster.randomMovement();
-        });
-    }   
+    // To 
+    game.combatManager();
     
+    // moving the monters to a random position
+    monsters.forEach(monster => { monster.randomMovement(); });
+
     // Generating monsters on the screen
     monsterGenerator();
     
@@ -123,12 +122,6 @@ window.onload = () => {
         player.attack(clickedX, clickedY);
     });
 }
-
-
-//
-// function startGame() {
-//     updateGame();
-// }
 
 
 /* 
