@@ -21,7 +21,7 @@ const graves = [];
 // calling the first method of the game. The menu screen
 game.menu(); 
 
-    
+
 // MAIN-FUNCTION: to update the game's screen
 const updateGame = () => {
     game.clearCanvas();
@@ -73,13 +73,12 @@ const updateGame = () => {
     // Checking the loss condition of the game (if the player still alive)
     if (!player.alive) {
         cancelAnimationFrame(game.animationId);
-        game.gameOver(); // render gaveOver screen
+        game.gameOver(); // render gameOver screen
         return; // to stop this loop (updateGame() main-function)
     }
 
     // Scheduling updates to the canvas (recursive function)
     game.animationId = requestAnimationFrame(updateGame);
-    //console.log('rodando'); //--------------------------------------DEBUGGER
 }
 
 // FUNCTION: Waiting for the screen to load.

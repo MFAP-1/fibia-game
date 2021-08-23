@@ -64,7 +64,6 @@ class Character {
         }
     }
     
-
     // auxiliary methods for collisionDetection() and clashIdentifier()
     left() { 
         return this.coordX;
@@ -190,7 +189,7 @@ class Monster extends Character {
 
         this.yieldExperience = yieldExperience; // amount of experience that it will yield to the player after
         this.combat = false; // not in combat
-        this.moveDirection = 0; // 0 - up, 1- down, 2- left, 3- right and 4-do not move
+        this.moveDirection = 0; // 0 - up, 1- down, 2- left and 3- right
     }
 
     // Method to randomize 
@@ -208,23 +207,21 @@ class Monster extends Character {
                     break;
                 case 1: // down
                     this.coordY += this.velocity;
-                    if (this.monsterCollisionDetection()) { // if there was a collision with the intended movement
-                        this.coordY -= this.velocity; // revert that movement
+                    if (this.monsterCollisionDetection()) { 
+                        this.coordY -= this.velocity; 
                     }
                     break;
                 case 2: // left
                     this.coordX -= this.velocity;
-                    if (this.monsterCollisionDetection()) { // if there was a collision with the intended movement
-                        this.coordX += this.velocity; // revert that movement
+                    if (this.monsterCollisionDetection()) { 
+                        this.coordX += this.velocity; 
                     }
                     break;
                 case 3: // right
                     this.coordX += this.velocity;
-                    if (this.monsterCollisionDetection()) { // if there was a collision with the intended movement
-                        this.coordX -= this.velocity; // revert that movement
+                    if (this.monsterCollisionDetection()) { 
+                        this.coordX -= this.velocity;
                     }
-                    break;
-                case 4: // do not move
                     break;
             }
         } 
