@@ -8,10 +8,17 @@
 
 /* Main */
 main {
-    background-color: aqua;
-    padding: 50px 0;
+    /* background-color: aqua; */
+    background-image: url("../background/bg4.jpeg");
+    background-size: cover;
+    background-position: right;
+    padding: 30px 0;
 }
 
+div, 
+aside {
+    background-color: aqua;
+}
 
 /* Canvas */
 canvas {

@@ -3,6 +3,7 @@
 // Instatiating the canvas
 const canvas = document.getElementById('the-canvas');
 const context = canvas.getContext("2d");
+let intervalId = 0;
 
 // Instatiating the player object (playerImg comes from 'sprites.js')
 const player = new Player(canvas.width/2, canvas.height/2);
@@ -36,7 +37,7 @@ window.onload = () => {
                 monsters[i].update();
                 monstersHealthBar[i].updateHealthBar(monsters[i].coordX, monsters[i].coordY, monsters[i].health);
                 // setTimeout(monsters[i].randomMovement(), 2.0*1000);
-                //monsters[i].randomMovement();
+                // monsters[i].randomMovement();
             // when the monster is dead
             } else { 
                 console.log('monster morreu'); //--------------------------------------DEBUGGER
@@ -62,10 +63,10 @@ window.onload = () => {
         monsterGenerator();
 
         // Checking the loss condition of the game (if the player still alive)
-        if (!player.alive) gameOver(intervalId);
+        if (!player.alive) gameOver();
 
         // Scheduling updates to the canvas (recursive function)
-        intervalId = setInterval(draw, 60); 
+        intervalId = setInterval(draw, 16); 
         //console.log('rodando'); //--------------------------------------DEBUGGER
     }
 
@@ -122,7 +123,7 @@ const menu = () => {
 
 
 // FUNCTION: To terminate the game 
-const gameOver = (intervalId) => {
+const gameOver = () => {
     clearCanvas();
     clearInterval(intervalId);
     context.font = '30px serif';

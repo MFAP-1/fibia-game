@@ -164,19 +164,19 @@ class Monster extends Character {
         // setTimeout( () => { // verificar a melhor forma de dar esse intervalo de tempo
             switch (this.move) {
                 case 0: 
-                    this.coordY -= this.velocity;
+                    this.coordY -= this.velocity / 10;
                     this.move = Math.floor(Math.random() * 4);
                     break;
                 case 1:
-                    this.coordY += this.velocity;
+                    this.coordY += this.velocity / 10;
                     this.move = Math.floor(Math.random() * 4);
                     break;
                 case 2: 
-                    this.coordX -= this.velocity;
+                    this.coordX -= this.velocity / 10;
                     this.move = Math.floor(Math.random() * 4);
                     break;
                 case 3: 
-                    this.coordX += this.velocity;
+                    this.coordX += this.velocity / 10;
                     this.move = Math.floor(Math.random() * 4);
                     break;
             }
