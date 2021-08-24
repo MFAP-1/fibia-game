@@ -88,7 +88,7 @@ class Player extends Character {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity
         super(coordX, coordY, 65, 65, playerImg, 150, 15, 32.5);
 
-        this.level = 2;
+        this.level = 1;
         this.surroundingMonsters = [];
         this.experience = 0;
         this.sx = 15;
@@ -98,8 +98,8 @@ class Player extends Character {
     // 4 Methods to move the player arround. (Checking the collision every step)
     moveUp() {
         this.coordY -= this.velocity;
-        this.sx = 80;
-        this.yAnimationType();
+        this.sx = 80; // to change the sprite's animation
+        this.generateAnimationType(); // to change the sprite's animation
         footstepSound.play();
         if (this.playerCollisionDetection()) { // if there was a collision with the intended movement
             this.coordY += this.velocity; // revert that movement
@@ -111,7 +111,7 @@ class Player extends Character {
     moveDown() {
         this.coordY += this.velocity;
         this.sx = 15;
-        this.yAnimationType();
+        this.generateAnimationType(); 
         footstepSound.play();
         if (this.playerCollisionDetection()) {
             this.coordY -= this.velocity;
@@ -123,7 +123,7 @@ class Player extends Character {
     moveLeft() {
         this.coordX -= this.velocity;
         this.sx = 212;
-        this.yAnimationType();
+        this.generateAnimationType();
         footstepSound.play();
         if (this.playerCollisionDetection()) {
             this.coordX += this.velocity;
@@ -135,7 +135,7 @@ class Player extends Character {
     moveRight() {
         this.coordX += this.velocity;
         this.sx = 145;
-        this.yAnimationType();
+        this.generateAnimationType();
         footstepSound.play();
         if (this.playerCollisionDetection()) {
             this.coordX -= this.velocity;
@@ -203,7 +203,7 @@ class Player extends Character {
     }
 
     // auxiliary method
-    yAnimationType() {
+    generateAnimationType() {
         if (this.animationtype === 1) { 
             this.sy = 83;
             this.animationtype = 2;
@@ -306,7 +306,7 @@ class GiantAnt extends Monster {
         this.animationtype = 1;  // either 1, 2 or 3. only 3 sprits for every diretcion
     }
     
-    // auxiliary method to generate the correct animation type
+    // auxiliary method to generate the correct animation type for the Giant-Ant
     generateAnimationType() {
         switch (this.moveDirection) { 
             case 0: // up
@@ -375,7 +375,7 @@ class GiantAnt extends Monster {
     // Method to update and animate the sprite of the giantAnt
     animateSprite() {
         if (game.frames % 30 === 0) { // every 30 frames (0.5 seconds)
-            this.generateAnimationType(); // to change the animation
+            this.generateAnimationType(); // to change the sprite's animation
         }
         context.drawImage(this.image, this.sx, this.sy, 60, 60, this.coordX, this.coordY, this.width, this.height);
     }
@@ -393,6 +393,7 @@ class GiantWasp extends Monster {
         this.animationtype = 1;  // either 1, 2 or 3. only 3 sprits for every diretcion
     }
 
+    // auxiliary method to generate the correct animation type for the Giant-Wasp
     generateAnimationType() {
         switch (this.moveDirection) { 
             case 0: // up
@@ -449,7 +450,7 @@ class GiantWasp extends Monster {
     // Method to update and animate the sprite of the Spider
     animateSprite() {
         if (game.frames % 30 === 0) { // every 30 frames (0.5 seconds)
-            this.generateAnimationType(); // to change the animation
+            this.generateAnimationType(); // to change the sprite's animation
         }
         context.drawImage(this.image, this.sx, this.sy, 60, 60, this.coordX, this.coordY, this.width, this.height);
     }
@@ -468,6 +469,7 @@ class GiantSpider extends Monster {
         this.animationtype = 1;  // either 1, 2 or 3. only 3 sprits for every diretcion
     }
 
+    // auxiliary method to generate the correct animation type for the Giant-Spider
     generateAnimationType() {
         switch (this.moveDirection) { 
             case 0: // up
@@ -524,7 +526,7 @@ class GiantSpider extends Monster {
     // Method to update and animate the sprite of the Spider
     animateSprite() {
         if (game.frames % 30 === 0) { // every 30 frames (0.5 seconds)
-            this.generateAnimationType(); // to change the animation
+            this.generateAnimationType(); // to change the sprite's animation
         }
         context.drawImage(this.image, this.sx, this.sy, 65, 65, this.coordX, this.coordY, this.width, this.height);
     }
@@ -541,7 +543,8 @@ class Demon extends Monster {
         this.sy = 0;
         this.animationtype = 1;  // either 1, 2 or 3. only 3 sprits for every diretcion
     }
-    // auxiliary method to generate the correct animation type
+
+    // auxiliary method to generate the correct animation type for the Demon
     generateAnimationType() {
         switch (this.moveDirection) { 
             case 0: // up
@@ -610,7 +613,7 @@ class Demon extends Monster {
     // Method to update and animate the sprite of the giantAnt
     animateSprite() {
         if (game.frames % 30 === 0) { // every 30 frames (0.5 seconds)
-            this.generateAnimationType(); // to change the animation
+            this.generateAnimationType(); // to change the sprite's animation
         }
         context.drawImage(this.image, this.sx, this.sy, 64, 64, this.coordX, this.coordY, this.width, this.height);
     }
