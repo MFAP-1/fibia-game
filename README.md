@@ -3,7 +3,7 @@
             PRINT AQUI OU GIF
 
 ## About the game
-Fibia is a 2d tile based rpg (Role Playing Game). As such, you gain experience from slaying monsters in the arena, and when you level up, more challenging monsters will come after you.
+Fibia is a 2d tile based rpg (Role Playing Game). As such, you gain experience by slaying monsters in the arena, and when you level up, more challenging monsters will come after you.
 
 ## Play it now!
 Just follow the live link: xxxxxxx.
@@ -13,13 +13,14 @@ Clone or download this repository. Run the index.html and let me know what you t
 
 ## Contributing
 This is an open source project, feel free to fork it, make improvements and submit a pull request.
+
 **Feedback are more than welcome!** Just keep in mind that this was a one-week educational project.
 
 ## Find more about this project
 To see a slide presentation, just follow the link: xxxxxxx.
 
 ## Disclaimer
-The Fibia game-project was inspired in a classic MMORPG Tibia (https://www.tibia.com/), and it was built solely for education purposes. Thus, I do not own any copyrights to any sprites nor the sounds used in this project.
+The Fibia game-project was inspired in a classic MMORPG Tibia (https://www.tibia.com/), and it was built solely for education purposes. Thus, I do not own any copyrights to  sprites nor sounds used in this project.
 
 You can find sprites and sounds in the following links:
 >* https://tibiaking.com/forums/topic/61981-mega-pack-sprites-39000-rpg-server/

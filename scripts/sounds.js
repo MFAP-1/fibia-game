@@ -6,11 +6,6 @@ const engageCombatSound = new Audio();
 engageCombatSound.src = '../assets/audio/sword.flac';
 engageCombatSound.volume = 0.3;
 
-// Sound for the gameover
-const gameOverSound = new Audio();
-gameOverSound.src = '../assets/audio/gameOver.wav';
-gameOverSound.volume = 0.9;
-
 // Sound for the Rat attack
 const ratAttackSound = new Audio();
 ratAttackSound.src = '../assets/audio/rat.flac';
@@ -21,10 +16,20 @@ const dragonAttackSound = new Audio();
 dragonAttackSound.src = '../assets/audio/dragon.wav';
 dragonAttackSound.volume = 0.5;
 
-// Sound for the Dragon attack
+// Sound for the Demon attack
 const demonAttackSound = new Audio();
 demonAttackSound.src = '../assets/audio/demon-laugh.wav';
 demonAttackSound.volume = 0.5;
+
+// Sound for the gameover
+const gameOverSound = new Audio();
+gameOverSound.src = '../assets/audio/gameOver.wav';
+gameOverSound.volume = 0.95;
+
+// Sound for when the player is walking
+const footstepSound = new Audio();
+footstepSound.src = '../assets/audio/footsteps.wav';
+footstepSound.volume = 0.3;
 
 // Background track-sound for the game
 const backgroundSound = new Audio();

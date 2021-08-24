@@ -10,8 +10,8 @@ class Game {
     // Method to render the main menu screen
     menu () {
         context.font = '30px serif';
-        context.fillStyle = 'black';
-        context.fillText('PRESS ENTER TO PLAY.', 170, 350);
+        context.fillStyle = 'bisque';
+        context.fillText('PRESS ENTER TO PLAY.', 160, 340);
     }
 
     // Method to To clear the canvas
@@ -25,8 +25,8 @@ class Game {
         backgroundSound.pause();
         gameOverSound.play();
         context.font = '30px serif';
-        context.fillStyle = 'black';
-        context.fillText('GAME OVER :(', 300, 350);
+        context.fillStyle = 'bisque';
+        context.fillText('GAME OVER :(', 250, 350);
     }
 
     // Method To manage the combat actions and
@@ -55,6 +55,7 @@ class Character {
 
     // Method to update the sprite of any given character
     updateSprite() {
+        // this.animateSprite();
         context.drawImage(this.image, this.coordX, this.coordY, this.width, this.height);
     }
 
@@ -95,6 +96,7 @@ class Player extends Character {
     // 4 Methods to move the player arround. (Checking the collision every step)
     moveUp() {
         this.coordY -= this.velocity;
+        footstepSound.play();
         if (this.playerCollisionDetection()) { // if there was a collision with the intended movement
             this.coordY += this.velocity; // revert that movement
         } else { // if there was no collision
@@ -104,6 +106,7 @@ class Player extends Character {
     }
     moveDown() {
         this.coordY += this.velocity;
+        footstepSound.play();
         if (this.playerCollisionDetection()) {
             this.coordY -= this.velocity;
         } else { 
@@ -113,6 +116,7 @@ class Player extends Character {
     }
     moveLeft() {
         this.coordX -= this.velocity;
+        footstepSound.play();
         if (this.playerCollisionDetection()) {
             this.coordX += this.velocity;
         } else { 
@@ -122,6 +126,7 @@ class Player extends Character {
     }
     moveRight() {
         this.coordX += this.velocity;
+        footstepSound.play();
         if (this.playerCollisionDetection()) {
             this.coordX -= this.velocity;
         } else { 
