@@ -31,7 +31,7 @@ class Game {
 
     // Method To manage the combat actions and
     combatManager() {
-        if (game.frames % 60 === 0) { // every 60 frames (1 seconds if 60fps)
+        if (game.frames % 60 === 0) { // every 60 frames (1 seconds)
             // player receiving dmg every iteration for every monsters in its surroundings
             player.surroundingMonsters.forEach(monster => { monster.causeDamage(); });
         }   
@@ -86,7 +86,7 @@ class Character {
 class Player extends Character {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity
-        super(coordX, coordY, 70, 70, playerImg, 10, 150, 30);
+        super(coordX, coordY, 70, 70, playerImg, 150, 15, 30);
 
         this.level = 1;
         this.surroundingMonsters = [];
@@ -186,21 +186,22 @@ class Player extends Character {
 
 // SUB CLASS (INTERMEDIATE CLASS): to define attributes and methods for a generic monster 
 class Monster extends Character {
-    constructor(coordX, coordY, width, height, image, health, strength, velocity, yieldExperience) {
+    constructor(coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity
         super(coordX, coordY, width, height, image, health, strength, velocity);
 
         this.yieldExperience = yieldExperience; // amount of experience that it will yield to the player after
         this.combat = false; // not in combat
         this.moveDirection = 0; // 0 - up, 1- down, 2- left and 3- right
+        this.moveCooldown = moveCooldown;
     }
 
-    // Method to randomize 
+    // Method to randomize the movement for a monster
     randomMovement() {
-        // This will happend every 120 frames (2 seconds if 60fps) and if the monster isn't in combat
-        if (game.frames % 120 === 0 && this.combat === false) { 
+        // This will happend if the monster isn't in combat, and every interval of time defined by the "moveCooldown" attribuite. Example: 120 frames (2 seconds) for the Rat class. 
+        if (game.frames % this.moveCooldown === 0 && this.combat === false) { 
             // Generating a new random move direciton for this iteration
-            this.moveDirection = Math.floor(Math.random() * 5);
+            this.moveDirection = Math.floor(Math.random() * 4);
             switch (this.moveDirection) {  // switch statement to check the move direction and then move it
                 case 0: // up
                     this.coordY -= this.velocity;
@@ -234,23 +235,21 @@ class Monster extends Character {
     causeDamage() {
         player.health -= this.strength; 
         this.sound.play();
-        console.log('COMBATE (monstro atacando):', player.health, this.health); //---------------------------DEBUGGER
+        console.log('COMBATE (monstro atacando):', player.health, this.health); //-----------------------DEBUGGER
     }
 
     // Method to check if there is a collision (triggered by a monster)
     monsterCollisionDetection() {
-        console.log('Surrounding (triggered by monster)=',player.surroundingMonsters); // -----------------------DEBUGGER
+        console.log('Surrounding (triggered by monster)=',player.surroundingMonsters); // ----------------DEBUGGER
         // first, checking collision with the wall
         let collision = (this.left() <= 0 || this.right() >= canvas.width || this.top() <= 0 || this.bottom() >= canvas.height);
         if (collision) return true; // if statement to check whether the collision has occurred
-        
         // checking against the player sprite
         if (clashIdentifier(this, player)) {
             player.surroundingMonsters.push(this); // if it doesn't exist, push it
             this.combat = true; // updating the status of the monster to true for the combat
             return true; // stops function and return true 
         }
-
         // now checking collision with other monsters from the array of monsters
         for (let i = 0; i < monsters.length; i++) {
             for (let j = i + 1; j < monsters.length; j++) {
@@ -267,8 +266,8 @@ class Monster extends Character {
 // DERIVED CLASS: to instantiate a rat and its attributes
 class Rat extends Monster {
     constructor(coordX, coordY) {
-        // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience
-        super(coordX, coordY, 70, 70, monster1Img, 20, 3, 30, 250); // (monster#Img comes from 'sprites.js')
+        // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
+        super(coordX, coordY, 70, 70, monster1Img, 20, 3, 30, 250, 120); // (monster#Img comes from 'sprites.js')
         this.sound = ratAttackSound;
     }
 }
@@ -276,8 +275,8 @@ class Rat extends Monster {
 // DERIVED CLASS: to instantiate a dragon and its attributes 
 class Dragon extends Monster {
     constructor(coordX, coordY) {
-        // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience
-        super(coordX, coordY, 70, 70, monster2Img, 50, 7, 40, 500);
+        // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
+        super(coordX, coordY, 70, 70, monster2Img, 50, 7, 40, 500, 90);
         this.sound = dragonAttackSound;
     }
 }
@@ -285,8 +284,8 @@ class Dragon extends Monster {
 // DERIVED CLASS: to instantiate a demon and its attributes
 class Demon extends Monster {
     constructor(coordX, coordY) {
-        // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience
-        super(coordX, coordY, 70, 70,  monster3Img, 100, 15, 60, 1000);
+        // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
+        super(coordX, coordY, 70, 70,  monster3Img, 100, 15, 60, 1000, 60);
         this.sound = demonAttackSound;
     }
 }
