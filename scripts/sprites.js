@@ -2,7 +2,7 @@
 
 // Player's sprite
 let playerImg = new Image();
-playerImg.src = '/assets/sprites/player_test.png';
+playerImg.src = '/assets/sprites/player.png';
 
 // Monster sprits # 1: Rat
 let monster1Img = new Image();

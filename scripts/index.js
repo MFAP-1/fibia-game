@@ -31,7 +31,7 @@ const updateGame = () => {
 
     // updating the sprite of the player (if the player still alive)
     if (!player.checkDeath()) {
-        player.updateSprite();
+        player.animateSprite();
         playerHealthBar.updateHealthBar(player.coordX, player.coordY, player.health);
     }
 

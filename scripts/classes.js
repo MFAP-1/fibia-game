@@ -55,7 +55,6 @@ class Character {
 
     // Method to update the sprite of any given character
     updateSprite() {
-        // this.animateSprite();
         context.drawImage(this.image, this.coordX, this.coordY, this.width, this.height);
     }
 
@@ -92,10 +91,15 @@ class Player extends Character {
         this.level = 1;
         this.surroundingMonsters = [];
         this.experience = 0;
+        this.sx = 15;
+        this.sy = 20;
+        this.animationtype = 1;
     }
     // 4 Methods to move the player arround. (Checking the collision every step)
     moveUp() {
         this.coordY -= this.velocity;
+        this.sx = 83;
+        this.yAnimationType();
         footstepSound.play();
         if (this.playerCollisionDetection()) { // if there was a collision with the intended movement
             this.coordY += this.velocity; // revert that movement
@@ -106,6 +110,8 @@ class Player extends Character {
     }
     moveDown() {
         this.coordY += this.velocity;
+        this.sx = 15;
+        this.yAnimationType();
         footstepSound.play();
         if (this.playerCollisionDetection()) {
             this.coordY -= this.velocity;
@@ -116,6 +122,8 @@ class Player extends Character {
     }
     moveLeft() {
         this.coordX -= this.velocity;
+        this.sx = 219;
+        this.yAnimationType();
         footstepSound.play();
         if (this.playerCollisionDetection()) {
             this.coordX += this.velocity;
@@ -126,6 +134,8 @@ class Player extends Character {
     }
     moveRight() {
         this.coordX += this.velocity;
+        this.sx = 151;
+        this.yAnimationType();
         footstepSound.play();
         if (this.playerCollisionDetection()) {
             this.coordX -= this.velocity;
@@ -185,6 +195,23 @@ class Player extends Character {
                     console.log('COMBATE (player atacando):', player.health, monster.health); //------------------------DEBUGGER
             }
         });
+    }
+
+    // update and animate the sprite
+    animateSprite() {
+        
+        context.drawImage(this.image, this.sx, this.sy, 45, 45, this.coordX, this.coordY, this.width, this.height);
+    }
+
+    // auxiliary method
+    yAnimationType() {
+        if (this.animationtype === 1) { 
+            this.sy = 83;
+            this.animationtype = 2;
+        } else {
+            this.sy = 20;
+            this.animationtype = 1;
+        }
     }
 }
 
