@@ -55,7 +55,14 @@ class Character {
 
     // Method to update the sprite of any given character
     updateSprite() {
-        context.drawImage(this.image, this.coordX, this.coordY, this.width, this.height);
+        if (this.monsterId !== 4){  // ------------- IF ELSE TO DEBUG THE ANT
+            if (game.frames % 30 === 0) { // every 30 frames (0.5 seconds)
+                this.generateAnimationType(); // to change the animation
+            }
+            this.animateSprite();
+        } else { 
+            context.drawImage(this.image, this.coordX, this.coordY, this.width, this.height);
+        }
     }
 
     // Method to check if the character is dead 
@@ -86,19 +93,19 @@ class Character {
 class Player extends Character {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity
-        super(coordX, coordY, 70, 70, playerImg, 150, 15, 30);
+        super(coordX, coordY, 65, 65, playerImg, 150, 15, 32.5);
 
         this.level = 1;
         this.surroundingMonsters = [];
         this.experience = 0;
         this.sx = 15;
         this.sy = 20;
-        this.animationtype = 1;
+        this.animationtype = 1;  // either 1 or 2. only 2 sprits for every diretcion
     }
     // 4 Methods to move the player arround. (Checking the collision every step)
     moveUp() {
         this.coordY -= this.velocity;
-        this.sx = 83;
+        this.sx = 80;
         this.yAnimationType();
         footstepSound.play();
         if (this.playerCollisionDetection()) { // if there was a collision with the intended movement
@@ -122,7 +129,7 @@ class Player extends Character {
     }
     moveLeft() {
         this.coordX -= this.velocity;
-        this.sx = 219;
+        this.sx = 212;
         this.yAnimationType();
         footstepSound.play();
         if (this.playerCollisionDetection()) {
@@ -134,7 +141,7 @@ class Player extends Character {
     }
     moveRight() {
         this.coordX += this.velocity;
-        this.sx = 151;
+        this.sx = 145;
         this.yAnimationType();
         footstepSound.play();
         if (this.playerCollisionDetection()) {
@@ -197,9 +204,8 @@ class Player extends Character {
         });
     }
 
-    // update and animate the sprite
+    // Method to update and animate the sprite of the player
     animateSprite() {
-        
         context.drawImage(this.image, this.sx, this.sy, 45, 45, this.coordX, this.coordY, this.width, this.height);
     }
 
@@ -290,26 +296,235 @@ class Monster extends Character {
                 }
             }
         }
-        return false; // if none of the testings above were true, that means: no collision! Thus, return false.
+        return false; // if none of the testings above were true, that means: no collision!  Thus, return false.
     }
 }
 
 
-// DERIVED CLASS: to instantiate a rat and its attributes
-class Rat extends Monster {
+// DERIVED CLASS: to instantiate a Giant-Ant and its attributes 
+class GiantAnt extends Monster {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
-        super(coordX, coordY, 70, 70, monster1Img, 20, 3, 30, 250, 120); // (monster#Img comes from 'sprites.js')
-        this.sound = ratAttackSound;
+        super(coordX, coordY, 65, 65, monster1Img, 20, 3, 32.5, 250, 120);
+        this.sound = giantAntAttackSound;
+        this.monsterId = 1;
+        this.sx = 780;
+        this.sy = 10;
+        this.animationtype = 1;  // either 1, 2 or 3. only 3 sprits for every diretcion
+    }
+    
+    // auxiliary method to generate the correct animation type
+    generateAnimationType() {
+        switch (this.moveDirection) { 
+            case 0: // up
+                if (this.animationtype === 1) { 
+                    this.sx = 906;
+                    this.sy = 10;
+                    this.animationtype = 2;
+                } else if (this.animationtype === 2) {
+                    this.sx = 652;
+                    this.sy = 10;
+                    this.animationtype = 3;
+                } else {
+                    this.sx = 140;
+                    this.sy = 81;
+                    this.animationtype = 1;
+                }
+                break;
+            case 1: // down
+                if (this.animationtype === 1) { 
+                    this.sx = 780;
+                    this.sy = 10;
+                    this.animationtype = 2;
+                } else if (this.animationtype === 2) {
+                    this.sx = 12;
+                    this.sy = 81;
+                    this.animationtype = 3;
+                } else {
+                    this.sx = 262;
+                    this.sy = 70;
+                    this.animationtype = 1;
+                }
+                break;
+            case 2: // left
+                if (this.animationtype === 1) { 
+                    this.sx = 844;
+                    this.sy = 10;
+                    this.animationtype = 2;
+                } else if (this.animationtype === 2) {
+                    this.sx = 76;
+                    this.sy = 81;
+                    this.animationtype = 3;
+                } else {
+                    this.sx = 332;
+                    this.sy = 81;
+                    this.animationtype = 1;
+                }
+                break;
+            case 3: // right
+                if (this.animationtype === 1) { 
+                    this.sx = 716;
+                    this.sy = 10;
+                    this.animationtype = 2;
+                } else if (this.animationtype === 2) {
+                    this.sx = 972;
+                    this.sy = 10;
+                    this.animationtype = 3;
+                } else {
+                    this.sx = 204;
+                    this.sy = 81;
+                    this.animationtype = 1;
+                }
+                break;
+        }
+    }
+
+    // Method to update and animate the sprite of the giantAnt
+    animateSprite() {
+        context.drawImage(this.image, this.sx, this.sy, 60, 60, this.coordX, this.coordY, this.width, this.height);
     }
 }
 
-// DERIVED CLASS: to instantiate a dragon and its attributes 
-class Dragon extends Monster {
+// DERIVED CLASS: to instantiate a spider and its attributes 
+class GiantWasp extends Monster {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
-        super(coordX, coordY, 70, 70, monster2Img, 50, 7, 40, 500, 90);
-        this.sound = dragonAttackSound;
+        super(coordX, coordY, 65, 65, monster2Img, 35, 5, 48.75, 500, 105);
+        this.monsterId = 2;
+        this.sound = giantWaspAttackSound;
+        this.sx = 120;
+        this.sy = 5;
+        this.animationtype = 1;  // either 1, 2 or 3. only 3 sprits for every diretcion
+    }
+
+    generateAnimationType() {
+        switch (this.moveDirection) { 
+            case 0: // up
+                if (this.animationtype === 1) { 
+                    this.sx = 0;
+                    this.animationtype = 2;
+                } else if (this.animationtype === 2) {
+                    this.sx = 256;
+                    this.animationtype = 3;
+                } else {
+                    this.sx = 512;
+                    this.animationtype = 1;
+                }
+                break;
+            case 1: // down
+                if (this.animationtype === 1) { 
+                    this.sx = 128;
+                    this.animationtype = 2;
+                } else if (this.animationtype === 2) {
+                    this.sx = 384;
+                    this.animationtype = 3;
+                } else {
+                    this.sx = 640;
+                    this.animationtype = 1;
+                }
+                break;
+            case 2: // left
+                if (this.animationtype === 1) { 
+                    this.sx = 194;
+                    this.animationtype = 2;
+                } else if (this.animationtype === 2) {
+                    this.sx = 450;
+                    this.animationtype = 3;
+                } else {
+                    this.sx = 706;
+                    this.animationtype = 1;
+                }
+                break;
+            case 3: // right
+                if (this.animationtype === 1) { 
+                    this.sx = 64;
+                    this.animationtype = 2;
+                } else if (this.animationtype === 2) {
+                    this.sx = 320;
+                    this.animationtype = 3;
+                } else {
+                    this.sx = 576;
+                    this.animationtype = 1;
+                }
+                break;
+        }
+    }
+
+    // Method to update and animate the sprite of the Spider
+    animateSprite() {
+        context.drawImage(this.image, this.sx, this.sy, 60, 60, this.coordX, this.coordY, this.width, this.height);
+    }
+}
+
+
+// DERIVED CLASS: to instantiate a spider and its attributes 
+class Spider extends Monster {
+    constructor(coordX, coordY) {
+        // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
+        super(coordX, coordY, 65, 65, monster3Img, 50, 7, 48.75, 500, 90);
+        this.monsterId = 3;
+        this.sound = spiderAttackSound;
+        this.sx = 120;
+        this.sy = 5;
+        this.animationtype = 1;  // either 1, 2 or 3. only 3 sprits for every diretcion
+    }
+
+    generateAnimationType() {
+        switch (this.moveDirection) { 
+            case 0: // up
+                if (this.animationtype === 1) { 
+                    this.sx = 0;
+                    this.animationtype = 2;
+                } else if (this.animationtype === 2) {
+                    this.sx = 256;
+                    this.animationtype = 3;
+                } else {
+                    this.sx = 512;
+                    this.animationtype = 1;
+                }
+                break;
+            case 1: // down
+                if (this.animationtype === 1) { 
+                    this.sx = 128;
+                    this.animationtype = 2;
+                } else if (this.animationtype === 2) {
+                    this.sx = 384;
+                    this.animationtype = 3;
+                } else {
+                    this.sx = 640;
+                    this.animationtype = 1;
+                }
+                break;
+            case 2: // left
+                if (this.animationtype === 1) { 
+                    this.sx = 194;
+                    this.animationtype = 2;
+                } else if (this.animationtype === 2) {
+                    this.sx = 450;
+                    this.animationtype = 3;
+                } else {
+                    this.sx = 706;
+                    this.animationtype = 1;
+                }
+                break;
+            case 3: // right
+                if (this.animationtype === 1) { 
+                    this.sx = 64;
+                    this.animationtype = 2;
+                } else if (this.animationtype === 2) {
+                    this.sx = 320;
+                    this.animationtype = 3;
+                } else {
+                    this.sx = 576;
+                    this.animationtype = 1;
+                }
+                break;
+        }
+    }
+
+    // Method to update and animate the sprite of the Spider
+    animateSprite() {
+        context.drawImage(this.image, this.sx, this.sy, 65, 65, this.coordX, this.coordY, this.width, this.height);
     }
 }
 
@@ -317,7 +532,8 @@ class Dragon extends Monster {
 class Demon extends Monster {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
-        super(coordX, coordY, 70, 70,  monster3Img, 100, 15, 60, 1000, 60);
+        super(coordX, coordY, 65, 65,  monster4Img, 100, 15, 65, 1000, 60);
+        this.monsterId = 4;
         this.sound = demonAttackSound;
     }
 }

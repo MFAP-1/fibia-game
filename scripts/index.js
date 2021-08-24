@@ -8,7 +8,7 @@ const context = canvas.getContext("2d");
 const game = new Game();
 
 // Instatiating the player object (playerImg comes from 'sprites.js')
-const player = new Player(canvas.width/2, canvas.height/2);
+const player = new Player(canvas.width/2 - 65/2, canvas.height/2 - 65/2);
 const playerHealthBar = new HealthBar(player.coordX, player.coordY , "green", player.health);
 
 // Instatiating one array for storing all monsters object 
@@ -136,10 +136,13 @@ FUNCTION: To instantiate monsters every iteration. Rules:
 function monsterGenerator() {
     for (let i = monsters.length; i < 4; i++) { 
         if (player.level < 2) {
-            monsters.push(new Rat(randomCoord(), randomCoord()));
-            monstersHealthBar.push(new HealthBar(monsters[i].coordX, monsters[i].coordY, "red", monsters[i].health));
+            monsters.push(new GiantAnt(randomCoord(), randomCoord()));
+            monstersHealthBar.push(new HealthBar(monsters[i].coordX + 10, monsters[i].coordY, "red", monsters[i].health)); 
         } else if (player.level < 3) {
-            monsters.push(new Dragon(randomCoord(), randomCoord()));
+            monsters.push(new GiantWasp(randomCoord(), randomCoord()));
+            monstersHealthBar.push(new HealthBar(monsters[i].coordX + 10, monsters[i].coordY, "red", monsters[i].health));
+        } else if (player.level < 4) {
+            monsters.push(new Spider(randomCoord(), randomCoord()));
             monstersHealthBar.push(new HealthBar(monsters[i].coordX + 10, monsters[i].coordY, "red", monsters[i].health));
         } else {
             monsters.push(new Demon(randomCoord(), randomCoord()));
@@ -147,7 +150,7 @@ function monsterGenerator() {
         }
         // if there is an overlapping situation, remove the later monster inserted
         if (overlappingMonster()) { 
-            console.log('!!!entrou no POP!!!');  //--------------------------------------DEBUGGER
+            console.log('!!!entrou no POP!!!');  //----------------------------DEBUGGER
             monsters.pop();
             monstersHealthBar.pop();
             i--; // the i controler in the for loop must be decresed since we removed one monster
@@ -155,10 +158,10 @@ function monsterGenerator() {
     }    
 }
 
-// AUX-FUNCTION: To randomize a coordinate (considering the size of any given character = 70x70)
+// AUX-FUNCTION: To randomize a coordinate (considering the size of any given character = 65x65)
 function randomCoord() {
     let currentCoord =  Math.floor(Math.random() * canvas.width);
-    let characterSize = 70; // To store the characters' size (they are 70x70)
+    let characterSize = 65; // To store the characters' size (they are 65x65)
     if (currentCoord + characterSize > canvas.width) { // checking if the random coordinate would stay out of bounds
         currentCoord -= characterSize;
     }
