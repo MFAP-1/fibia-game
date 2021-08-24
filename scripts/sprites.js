@@ -23,3 +23,11 @@ monster4Img.src = '/assets/sprites/demon.png';
 // Grave sprite
 let graveImg = new Image();
 graveImg.src = '/assets/sprites/gravestone.png';
+
+// Gold coin sprite
+let goldImg = new Image();
+goldImg.src = '/assets/sprites/gold-coin.png';
+
+// Potion sprite
+let potionImg = new Image();
+potionImg.src = '/assets/sprites/potion.png';

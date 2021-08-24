@@ -89,19 +89,21 @@ class Player extends Character {
         super(coordX, coordY, 65, 65, playerImg, 150, 15, 32.5);
 
         this.level = 1;
-        this.surroundingMonsters = [];
         this.experience = 0;
+        this.goldColleted = 0;
+        this.surroundingMonsters = [];
         this.sx = 15;
         this.sy = 20;
         this.animationtype = 1;  // either 1 or 2. only 2 sprits for every diretcion
     }
-    // 4 Methods to move the player arround. (Checking the collision every step)
+
+    // 4 Methods to move the player arround. 
     moveUp() {
         this.coordY -= this.velocity;
         this.sx = 80; // to change the sprite's animation
         this.generateAnimationType(); // to change the sprite's animation
         footstepSound.play();
-        if (this.playerCollisionDetection()) { // if there was a collision with the intended movement
+        if (this.playerCollisionDetection()) { // if there is a collision with the intended movement
             this.coordY += this.velocity; // revert that movement
         } else { // if there was no collision
             this.surroundingMonsters.forEach(monster => { monster.combat = false; }); // if there was a surrounding monster, set its combat to false
@@ -147,14 +149,12 @@ class Player extends Character {
 
     // Method to check if there is a collision (triggered by the player)
     playerCollisionDetection() {
-        console.log('Surrounding (triggered by player)=',player.surroundingMonsters); // -----------------------DEBUGGER
+        //console.log('Surrounding (triggered by player)=',player.surroundingMonsters); // --------------DEBUGGER
         // first, checking collision with the wall
         let collision = (this.left() <= 0 || this.right() >= canvas.width || this.top() <= 0 || this.bottom() >= canvas.height);
         if (collision) return true; // if statement to check whether the collision has occurred
-        
         // now checking collision with any given monster from the array of monsters
         for (let i = 0; i < monsters.length; i++) {
-            //console.log('Monster #', i, ':', monsters[i]); // -----------------------DEBUGGER
             if (clashIdentifier(player, monsters[i])) { // if statement to check whether the collision has occurred
                 // For loop the check if the current colliding monster is already in the player's array of surrounding
                 for (let j = 0; j < player.surroundingMonsters.length; j++) {
@@ -172,20 +172,20 @@ class Player extends Character {
     
     // 
     levelUp() {
-        const experienceTable = [1000, 2050, 4200, 8600, 17600]; // pre-defined amounts of experience required for leveling up
+        const experienceTable = [1000, 2050, 4200, 8600, 17600, 36080]; // pre-defined amounts of experience required for leveling up
         for (let i = 0; i < experienceTable.length; i++) {
             if (this.experience > experienceTable[i]){
                 this.level = i + 2; // +2 cause in the 0 index is the level up from lvl 1 to 2. and so on.
             }
         }
         // updating the level on the screen
-        const levelDisplayElement = document.querySelector('div span');
+        const levelDisplayElement = document.getElementById('level-display');
         levelDisplayElement.innerHTML = this.level;
     }
 
     // 
-    attack(clickedX, clickedY) {
-        console.log('player is attacking (!!). He clicked at x: ', clickedX, '/ y: ',clickedY);//---------------------DEBUGGER
+    attacking(clickedX, clickedY) {
+        //console.log('player is attacking(!). He clicked at: ', clickedX, '/ y: ',clickedY);//----------DEBUGGER
         // for meele attack, check if the clicked monster is surrounding the player
         this.surroundingMonsters.forEach(monster => {
             if ((clickedX >= monster.coordX && clickedX <= monster.coordX + monster.width) &&
@@ -195,6 +195,29 @@ class Player extends Character {
                     console.log('COMBATE (player atacando):', player.health, monster.health); //------------------------DEBUGGER
             }
         });
+    }
+
+    // Method to check and loot anything that it is on the floor (gold or potion)
+    looting() {
+        // looting gold
+        goldCoins.forEach((coin, index) => {
+            if(clashIdentifier(player, coin)) {
+                this.goldColleted++; 
+                goldCollectSound.play();
+                goldCoins.splice(index, 1); // removing the gold from the game
+            }
+        });
+        // looting potions
+        potions.forEach((potion, index) => {
+            if(clashIdentifier(player, potion)) {
+                if (this.health < 75) { this.health += 75; }
+                if (this.health >= 75) { this.health = 150; }
+                drinkingPotionSound.play();
+                potions.splice(index, 1); // removing the gold from the game
+            }
+        });
+        const goldDisplayElement = document.getElementById('gold-display');
+        goldDisplayElement.innerHTML = this.goldColleted;
     }
 
     // Method to update and animate the sprite of the player
@@ -271,7 +294,7 @@ class Monster extends Character {
 
     // Method to check if there is a collision (triggered by a monster)
     monsterCollisionDetection() {
-        console.log('Surrounding (triggered by monster)=',player.surroundingMonsters); // ----------------DEBUGGER
+        //console.log('Surrounding (triggered by monster)=',player.surroundingMonsters); // --------------DEBUGGER
         // first, checking collision with the wall
         let collision = (this.left() <= 0 || this.right() >= canvas.width || this.top() <= 0 || this.bottom() >= canvas.height);
         if (collision) return true; // if statement to check whether the collision has occurred

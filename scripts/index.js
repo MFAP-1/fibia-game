@@ -18,6 +18,12 @@ const monstersHealthBar = []; // Instatiating one array for storing all monsters
 // Instatiating the graves array
 const graves = [];
 
+// Instatiating the gold coins array
+const goldCoins = [];
+
+// Instatiating the potions array
+const potions = [];
+
 // calling the first method of the game. The menu screen
 game.menu(); 
 
@@ -41,10 +47,19 @@ const updateGame = () => {
             monsters[i].animateSprite();
             monstersHealthBar[i].updateHealthBar(monsters[i].coordX, monsters[i].coordY, monsters[i].health);   
         } else { // if the monster is dead, do:
-            console.log('monster morreu'); //--------------------------------------DEBUGGER
-            // inserting a gravestone to its array
-            monsters[i].image = graveImg;
+            console.log('monster morreu'); //-------------------------------DEBUGGER
+            
+            //inserting a gold coin into its array
+            goldCoins.push(monsters[i]);
+
+            // inserting a potion into its array (with a 10% chance)
+            if (Math.floor(Math.random() * 10) === 0) { potions.push(monsters[i]); }
+            
+            // inserting a gravestone into its array
+            // monsters[i].coordX += 40;
+            // monsters[i].coordY += 40;
             graves.push(monsters[i]);
+
             // to keep the count of displayed graves up to 2 at the time
             if (graves.length > 2) graves.shift(); // remove the first in the array
             // increase experience for the player
@@ -60,13 +75,41 @@ const updateGame = () => {
 
     // updating the sprites of all the graves (if any) 
     for (let i = 0; i < graves.length; i++) {
+        graves[i].coordX += 20;
+        graves[i].coordY += 20;
+        graves[i].image = graveImg;
+        graves[i].width = 45;
+        graves[i].height = 45;
         graves[i].updateSprite();
+        graves[i].coordX -= 20;
+        graves[i].coordY -= 20;
     }
 
-    // 
+    // updating the sprites of all the gold (if any) 
+    for (let i = 0; i < goldCoins.length; i++) {
+        goldCoins[i].image = goldImg;
+        goldCoins[i].width = 20;
+        goldCoins[i].height = 20;
+        goldCoins[i].updateSprite();
+    }
+
+    // updating the sprites of all the potions (if any) 
+    for (let i = 0; i < potions.length; i++) {
+        potions[i].coordY += 25;
+        potions[i].image = potionImg;
+        potions[i].width = 20;
+        potions[i].height = 20;
+        potions[i].updateSprite();
+        potions[i].coordY -= 25;
+    }
+
+    // Checking if there is any loot to be picked up
+    player.looting();
+
+    // combat
     game.combatManager();
     
-    // moving the monters to a random position
+    // moving all monters to a random position
     monsters.forEach(monster => { monster.randomMovement(); });
 
     // Generating monsters on the screen
@@ -122,7 +165,7 @@ window.onload = () => {
         // getting the correct coordinates (inside the canvas, independent of its position on the HTML/sreen size)
         let clickedX = event.pageX - canvas.offsetLeft + canvas.clientLeft;
         let clickedY = event.pageY - canvas.offsetTop + canvas.clientTop;
-        player.attack(clickedX, clickedY);
+        player.attacking(clickedX, clickedY);
     });
 }
 

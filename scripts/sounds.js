@@ -26,15 +26,25 @@ const demonAttackSound = new Audio();
 demonAttackSound.src = '../assets/audio/demon-laugh.wav';
 demonAttackSound.volume = 0.5;
 
-// Sound for the gameover
-const gameOverSound = new Audio();
-gameOverSound.src = '../assets/audio/gameOver.wav';
-gameOverSound.volume = 0.95;
-
 // Sound for when the player is walking
 const footstepSound = new Audio();
 footstepSound.src = '../assets/audio/footsteps.wav';
 footstepSound.volume = 0.3;
+
+// Sound for when the player collects gold
+const goldCollectSound = new Audio();
+goldCollectSound.src = '../assets/audio/gold-collect.wav';
+goldCollectSound.volume = 0.3;
+
+// Sound for when the player drinks a potion
+const drinkingPotionSound = new Audio();
+drinkingPotionSound.src = '../assets/audio/potion.wav';
+drinkingPotionSound.volume = 0.3;
+
+// Sound for the gameover
+const gameOverSound = new Audio();
+gameOverSound.src = '../assets/audio/gameOver.wav';
+gameOverSound.volume = 0.95;
 
 // Background track-sound for the game
 const backgroundSound = new Audio();
