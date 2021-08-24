@@ -22,6 +22,8 @@ class Game {
     // Method to render the game over screen
     gameOver() {
         this.clearCanvas();
+        backgroundSound.pause();
+        gameOverSound.play();
         context.font = '30px serif';
         context.fillStyle = 'black';
         context.fillText('GAME OVER :(', 300, 350);
@@ -84,7 +86,7 @@ class Character {
 class Player extends Character {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity
-        super(coordX, coordY, 70, 70, playerImg, 150, 15, 30);
+        super(coordX, coordY, 70, 70, playerImg, 10, 150, 30);
 
         this.level = 1;
         this.surroundingMonsters = [];

@@ -51,6 +51,7 @@ const updateGame = () => {
             player.experience += monsters[i].yieldExperience;
             player.levelUp(); // checking to update its level
             // removing the monster from the array and from the players surrounding
+            monsters[i].sound.pause();
             monsters.splice(i, 1);
             monstersHealthBar.splice(i, 1);
             player.surroundingMonsters.splice(0, 1);

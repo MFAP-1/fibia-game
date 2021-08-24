@@ -1,15 +1,20 @@
 // Fibia, the game: sounds js file
-// All sounds download in: https://freesound.org/
+// All sounds were downloaded from: https://freesound.org/
 
-// Sound for when a player and a monster engage in combat
+// Sound for when the player engage in combat
 const engageCombatSound = new Audio();
 engageCombatSound.src = '../assets/audio/sword.flac';
-engageCombatSound.volume = 0.2;
+engageCombatSound.volume = 0.3;
+
+// Sound for the gameover
+const gameOverSound = new Audio();
+gameOverSound.src = '../assets/audio/gameOver.wav';
+gameOverSound.volume = 0.9;
 
 // Sound for the Rat attack
 const ratAttackSound = new Audio();
 ratAttackSound.src = '../assets/audio/rat.flac';
-ratAttackSound.volume = 0.1;
+ratAttackSound.volume = 0.2;
 
 // Sound for the Dragon attack
 const dragonAttackSound = new Audio();
@@ -25,5 +30,3 @@ demonAttackSound.volume = 0.5;
 const backgroundSound = new Audio();
 backgroundSound.src = '../assets/audio/medieval-music.mp3';
 backgroundSound.volume = 0.1;
-
-// .play() <--- metodo para tocar no momento necessário
