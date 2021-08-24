@@ -12,13 +12,13 @@ monster1Img.src = '/assets/sprites/giant-ant.png';
 let monster2Img = new Image();
 monster2Img.src = '/assets/sprites/giant-wasp.png';
 
-// Monster sprits # 3: Spider
+// Monster sprits # 3: GiantSpider
 let monster3Img = new Image();
-monster3Img.src = '/assets/sprites/spider.png';
+monster3Img.src = '/assets/sprites/giant-spider.png';
 
 // Monster sprits # 4: Demon
 let monster4Img = new Image();
-monster4Img.src = '/assets/sprites/Demon.gif';
+monster4Img.src = '/assets/sprites/demon.png';
 
 // Grave sprite
 let graveImg = new Image();

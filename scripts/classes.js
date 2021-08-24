@@ -55,14 +55,7 @@ class Character {
 
     // Method to update the sprite of any given character
     updateSprite() {
-        if (this.monsterId !== 4){  // ------------- IF ELSE TO DEBUG THE ANT
-            if (game.frames % 30 === 0) { // every 30 frames (0.5 seconds)
-                this.generateAnimationType(); // to change the animation
-            }
-            this.animateSprite();
-        } else { 
-            context.drawImage(this.image, this.coordX, this.coordY, this.width, this.height);
-        }
+        context.drawImage(this.image, this.coordX, this.coordY, this.width, this.height);
     }
 
     // Method to check if the character is dead 
@@ -95,7 +88,7 @@ class Player extends Character {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity
         super(coordX, coordY, 65, 65, playerImg, 150, 15, 32.5);
 
-        this.level = 1;
+        this.level = 2;
         this.surroundingMonsters = [];
         this.experience = 0;
         this.sx = 15;
@@ -381,19 +374,22 @@ class GiantAnt extends Monster {
 
     // Method to update and animate the sprite of the giantAnt
     animateSprite() {
+        if (game.frames % 30 === 0) { // every 30 frames (0.5 seconds)
+            this.generateAnimationType(); // to change the animation
+        }
         context.drawImage(this.image, this.sx, this.sy, 60, 60, this.coordX, this.coordY, this.width, this.height);
     }
 }
 
-// DERIVED CLASS: to instantiate a spider and its attributes 
+// DERIVED CLASS: to instantiate a Giant-Wasp and its attributes 
 class GiantWasp extends Monster {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
-        super(coordX, coordY, 65, 65, monster2Img, 35, 5, 48.75, 500, 105);
+        super(coordX, coordY, 65, 65, monster2Img, 35, 5, 48.75, 350, 105);
         this.monsterId = 2;
         this.sound = giantWaspAttackSound;
         this.sx = 120;
-        this.sy = 5;
+        this.sy = 0;
         this.animationtype = 1;  // either 1, 2 or 3. only 3 sprits for every diretcion
     }
 
@@ -401,49 +397,49 @@ class GiantWasp extends Monster {
         switch (this.moveDirection) { 
             case 0: // up
                 if (this.animationtype === 1) { 
-                    this.sx = 0;
+                    this.sx = -10;
                     this.animationtype = 2;
                 } else if (this.animationtype === 2) {
-                    this.sx = 256;
+                    this.sx = 240;
                     this.animationtype = 3;
                 } else {
-                    this.sx = 512;
+                    this.sx = 495;
                     this.animationtype = 1;
                 }
                 break;
             case 1: // down
                 if (this.animationtype === 1) { 
-                    this.sx = 128;
+                    this.sx = 120;
                     this.animationtype = 2;
                 } else if (this.animationtype === 2) {
-                    this.sx = 384;
+                    this.sx = 376;
                     this.animationtype = 3;
                 } else {
-                    this.sx = 640;
+                    this.sx = 632;
                     this.animationtype = 1;
                 }
                 break;
             case 2: // left
                 if (this.animationtype === 1) { 
-                    this.sx = 194;
+                    this.sx = 182;
                     this.animationtype = 2;
                 } else if (this.animationtype === 2) {
-                    this.sx = 450;
+                    this.sx = 438;
                     this.animationtype = 3;
                 } else {
-                    this.sx = 706;
+                    this.sx = 694;
                     this.animationtype = 1;
                 }
                 break;
             case 3: // right
                 if (this.animationtype === 1) { 
-                    this.sx = 64;
+                    this.sx = 49;
                     this.animationtype = 2;
                 } else if (this.animationtype === 2) {
-                    this.sx = 320;
+                    this.sx = 305;
                     this.animationtype = 3;
                 } else {
-                    this.sx = 576;
+                    this.sx = 561;
                     this.animationtype = 1;
                 }
                 break;
@@ -452,18 +448,21 @@ class GiantWasp extends Monster {
 
     // Method to update and animate the sprite of the Spider
     animateSprite() {
+        if (game.frames % 30 === 0) { // every 30 frames (0.5 seconds)
+            this.generateAnimationType(); // to change the animation
+        }
         context.drawImage(this.image, this.sx, this.sy, 60, 60, this.coordX, this.coordY, this.width, this.height);
     }
 }
 
 
-// DERIVED CLASS: to instantiate a spider and its attributes 
-class Spider extends Monster {
+// DERIVED CLASS: to instantiate a Giant-Spider and its attributes 
+class GiantSpider extends Monster {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
         super(coordX, coordY, 65, 65, monster3Img, 50, 7, 48.75, 500, 90);
         this.monsterId = 3;
-        this.sound = spiderAttackSound;
+        this.sound = giantSpiderAttackSound;
         this.sx = 120;
         this.sy = 5;
         this.animationtype = 1;  // either 1, 2 or 3. only 3 sprits for every diretcion
@@ -524,17 +523,96 @@ class Spider extends Monster {
 
     // Method to update and animate the sprite of the Spider
     animateSprite() {
+        if (game.frames % 30 === 0) { // every 30 frames (0.5 seconds)
+            this.generateAnimationType(); // to change the animation
+        }
         context.drawImage(this.image, this.sx, this.sy, 65, 65, this.coordX, this.coordY, this.width, this.height);
     }
 }
 
-// DERIVED CLASS: to instantiate a demon and its attributes
+// DERIVED CLASS: to instantiate a Demon and its attributes
 class Demon extends Monster {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
         super(coordX, coordY, 65, 65,  monster4Img, 100, 15, 65, 1000, 60);
         this.monsterId = 4;
         this.sound = demonAttackSound;
+        this.sx = 510;
+        this.sy = 0;
+        this.animationtype = 1;  // either 1, 2 or 3. only 3 sprits for every diretcion
+    }
+    // auxiliary method to generate the correct animation type
+    generateAnimationType() {
+        switch (this.moveDirection) { 
+            case 0: // up
+                if (this.animationtype === 1) { 
+                    this.sx = 382;
+                    this.sy = 0;
+                    this.animationtype = 2;
+                } else if (this.animationtype === 2) {
+                    this.sx = 636;
+                    this.sy = 0;
+                    this.animationtype = 3;
+                } else {
+                    this.sx = 894;
+                    this.sy = 0;
+                    this.animationtype = 1;
+                }
+                break;
+            case 1: // down
+                if (this.animationtype === 1) { 
+                    this.sx = 510;
+                    this.sy = 0;
+                    this.animationtype = 2;
+                } else if (this.animationtype === 2) {
+                    this.sx = 766;
+                    this.sy = 0;
+                    this.animationtype = 3;
+                } else {
+                    this.sx = 0;
+                    this.sy = 70;
+                    this.animationtype = 1;
+                }
+                break;
+            case 2: // left
+                if (this.animationtype === 1) { 
+                    this.sx = 574;
+                    this.sy = 0;
+                    this.animationtype = 2;
+                } else if (this.animationtype === 2) {
+                    this.sx = 830;
+                    this.sy = 0;
+                    this.animationtype = 3;
+                } else {
+                    this.sx = 64;
+                    this.sy = 65;
+                    this.animationtype = 1;
+                }
+                break;
+            case 3: // right
+                if (this.animationtype === 1) { 
+                    this.sx = 448;
+                    this.sy = 0;
+                    this.animationtype = 2;
+                } else if (this.animationtype === 2) {
+                    this.sx = 704;
+                    this.sy = 0;
+                    this.animationtype = 3;
+                } else {
+                    this.sx = 960;
+                    this.sy = 0;
+                    this.animationtype = 1;
+                }
+                break;
+        }
+    }
+
+    // Method to update and animate the sprite of the giantAnt
+    animateSprite() {
+        if (game.frames % 30 === 0) { // every 30 frames (0.5 seconds)
+            this.generateAnimationType(); // to change the animation
+        }
+        context.drawImage(this.image, this.sx, this.sy, 64, 64, this.coordX, this.coordY, this.width, this.height);
     }
 }
 

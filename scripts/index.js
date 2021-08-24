@@ -38,7 +38,7 @@ const updateGame = () => {
     // updating the sprite of all the monsters
     for (let i = 0; i < monsters.length; i++) {
         if (!monsters[i].checkDeath()) { // if the monster still alive, update it
-            monsters[i].updateSprite();
+            monsters[i].animateSprite();
             monstersHealthBar[i].updateHealthBar(monsters[i].coordX, monsters[i].coordY, monsters[i].health);   
         } else { // if the monster is dead, do:
             console.log('monster morreu'); //--------------------------------------DEBUGGER
@@ -142,7 +142,7 @@ function monsterGenerator() {
             monsters.push(new GiantWasp(randomCoord(), randomCoord()));
             monstersHealthBar.push(new HealthBar(monsters[i].coordX + 10, monsters[i].coordY, "red", monsters[i].health));
         } else if (player.level < 4) {
-            monsters.push(new Spider(randomCoord(), randomCoord()));
+            monsters.push(new GiantSpider(randomCoord(), randomCoord()));
             monstersHealthBar.push(new HealthBar(monsters[i].coordX + 10, monsters[i].coordY, "red", monsters[i].health));
         } else {
             monsters.push(new Demon(randomCoord(), randomCoord()));

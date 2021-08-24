@@ -6,20 +6,20 @@ const engageCombatSound = new Audio();
 engageCombatSound.src = '../assets/audio/sword.flac';
 engageCombatSound.volume = 0.3;
 
-// Sound for the GiantAnt attack (monster #1)
+// Sound for the Giant-Ant attack (monster #1)
 const giantAntAttackSound = new Audio();
-giantAntAttackSound.src = '../assets/audio/ant.wav';
+giantAntAttackSound.src = '../assets/audio/giant-ant.wav';
 giantAntAttackSound.volume = 0.4;
 
-// Sound for the GiantWasp attack (monster #2)
+// Sound for the Giant-Wasp attack (monster #2)
 const giantWaspAttackSound = new Audio();
-giantWaspAttackSound.src = '../assets/audio/demon-laugh.wav';
+giantWaspAttackSound.src = '../assets/audio/giant-wasp.wav';
 giantWaspAttackSound.volume = 0.5;
 
-// Sound for the Spider attack (monster #3)
-const spiderAttackSound = new Audio();
-spiderAttackSound.src = '../assets/audio/dragon.wav';
-spiderAttackSound.volume = 0.5;
+// Sound for the Giant-Spider attack (monster #3)
+const giantSpiderAttackSound = new Audio();
+giantSpiderAttackSound.src = '../assets/audio/giant-spider.mp3';
+giantSpiderAttackSound.volume = 0.5;
 
 // Sound for the Demon attack (monster #4)
 const demonAttackSound = new Audio();
