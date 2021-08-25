@@ -87,20 +87,26 @@ const updateGame = () => {
 
     // updating the sprites of all the gold (if any) 
     for (let i = 0; i < goldCoins.length; i++) {
+        goldCoins[i].coordX += 20;
+        goldCoins[i].coordY += 35;
         goldCoins[i].image = goldImg;
         goldCoins[i].width = 20;
         goldCoins[i].height = 20;
         goldCoins[i].updateSprite();
+        goldCoins[i].coordX -= 20;
+        goldCoins[i].coordY -= 35;
     }
 
     // updating the sprites of all the potions (if any) 
     for (let i = 0; i < potions.length; i++) {
-        potions[i].coordY += 25;
+        potions[i].coordX += 20;
+        potions[i].coordY += 45;
         potions[i].image = potionImg;
         potions[i].width = 20;
         potions[i].height = 20;
         potions[i].updateSprite();
-        potions[i].coordY -= 25;
+        potions[i].coordX -= 20;
+        potions[i].coordY -= 45;
     }
 
     // Checking if there is any loot to be picked up

@@ -1,0 +1,59 @@
+/* Styles for Fibia, the game */
+
+/* general styling */
+* {
+    margin: 0;
+    font-family: 'MedievalSharp', cursive;
+}
+
+
+/* Main */
+main {
+    background-image: url("../../assets/background/page-bg.jpeg");
+    background-size: cover;
+    padding: 3rem 5rem;
+    color: #cca06d;
+    height: 100vh;
+}
+
+
+/* Canvas */
+canvas {
+    border: 4px solid black;
+
+    /* background-color: white; */
+
+    /* OPTION 4 */
+    /* background-image: url('../assets/background/area-bg4.jpeg');
+    background-size: cover; */
+    
+    /* OPTION 3 -- VENCENDO -- */
+    background-image: url('../../assets/background/arena-bg3.jpeg');
+    background-size: cover;
+
+    /* OPTION 2 */
+    /* background-image: url('../assets/background/arena-bg2.png');
+    background-size: cover; */
+    
+    /* OPTION 1 */
+    /* background-image: url('../assets/background/grass-bg.png'); */
+}
+
+
+/* aside (instructions tab) */
+aside {
+    background-image: url("../../assets/background/scroll-paper.jpeg");
+    background-size: cover;
+    background-position: top;
+    padding: 2.0rem 1.5rem;
+    color: black;
+}
+
+
+/* Footer */
+footer {
+    background-image: url("../../assets/background/scroll-paper.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: left;
+}

@@ -9,7 +9,7 @@ class Game {
 
     // Method to render the main menu screen
     menu () {
-        context.font = '30px serif';
+        context.font = '30px MedievalSharp, cursive';
         context.fillStyle = 'bisque';
         context.fillText('PRESS ENTER TO PLAY.', 160, 340);
     }
@@ -24,7 +24,7 @@ class Game {
         this.clearCanvas();
         backgroundSound.pause();
         gameOverSound.play();
-        context.font = '30px serif';
+        context.font = '30px MedievalSharp, cursive';
         context.fillStyle = 'bisque';
         context.fillText('GAME OVER :(', 250, 350);
     }
@@ -97,7 +97,7 @@ class Player extends Character {
         this.animationtype = 1;  // either 1 or 2. only 2 sprits for every diretcion
     }
 
-    // 4 Methods to move the player arround. 
+    // 4 Methods to move the player arround 
     moveUp() {
         this.coordY -= this.velocity;
         this.sx = 80; // to change the sprite's animation
@@ -170,7 +170,7 @@ class Player extends Character {
         return false; // if none of the testings above were true, that means: no collision! Thus, return false.
     }
     
-    // 
+    // Method to check the player level based on its experience
     levelUp() {
         const experienceTable = [1000, 2050, 4200, 8600, 17600, 36080]; // pre-defined amounts of experience required for leveling up
         for (let i = 0; i < experienceTable.length; i++) {
@@ -183,7 +183,7 @@ class Player extends Character {
         levelDisplayElement.innerHTML = this.level;
     }
 
-    // 
+    // Method for the player to cause damage
     attacking(clickedX, clickedY) {
         //console.log('player is attacking(!). He clicked at: ', clickedX, '/ y: ',clickedY);//----------DEBUGGER
         // for meele attack, check if the clicked monster is surrounding the player
@@ -211,11 +211,12 @@ class Player extends Character {
         potions.forEach((potion, index) => {
             if(clashIdentifier(player, potion)) {
                 if (this.health < 75) { this.health += 75; }
-                if (this.health >= 75) { this.health = 150; }
+                else if (this.health >= 75) { this.health = 150; }
                 drinkingPotionSound.play();
                 potions.splice(index, 1); // removing the gold from the game
             }
         });
+        // updating the gold count on the screen
         const goldDisplayElement = document.getElementById('gold-display');
         goldDisplayElement.innerHTML = this.goldColleted;
     }
@@ -324,12 +325,13 @@ class GiantAnt extends Monster {
         super(coordX, coordY, 65, 65, monster1Img, 20, 3, 32.5, 250, 120);
         this.sound = giantAntAttackSound;
         this.monsterId = 1;
+        // variables for animating the sprite
         this.sx = 780;
         this.sy = 10;
         this.animationtype = 1;  // either 1, 2 or 3. only 3 sprits for every diretcion
     }
     
-    // auxiliary method to generate the correct animation type for the Giant-Ant
+    // Method to generate the correct animation type for the Giant-Ant
     generateAnimationType() {
         switch (this.moveDirection) { 
             case 0: // up
@@ -411,12 +413,13 @@ class GiantWasp extends Monster {
         super(coordX, coordY, 65, 65, monster2Img, 35, 5, 48.75, 350, 105);
         this.monsterId = 2;
         this.sound = giantWaspAttackSound;
+        // variables for animating the sprite
         this.sx = 120;
         this.sy = 0;
         this.animationtype = 1;  // either 1, 2 or 3. only 3 sprits for every diretcion
     }
 
-    // auxiliary method to generate the correct animation type for the Giant-Wasp
+    // Method to generate the correct animation type for the Giant-Wasp
     generateAnimationType() {
         switch (this.moveDirection) { 
             case 0: // up
@@ -487,12 +490,13 @@ class GiantSpider extends Monster {
         super(coordX, coordY, 65, 65, monster3Img, 50, 7, 48.75, 500, 90);
         this.monsterId = 3;
         this.sound = giantSpiderAttackSound;
+        // variables for animating the sprite
         this.sx = 120;
         this.sy = 5;
         this.animationtype = 1;  // either 1, 2 or 3. only 3 sprits for every diretcion
     }
 
-    // auxiliary method to generate the correct animation type for the Giant-Spider
+    // Method to generate the correct animation type for the Giant-Spider
     generateAnimationType() {
         switch (this.moveDirection) { 
             case 0: // up
@@ -562,12 +566,13 @@ class Demon extends Monster {
         super(coordX, coordY, 65, 65,  monster4Img, 100, 15, 65, 1000, 60);
         this.monsterId = 4;
         this.sound = demonAttackSound;
+        // variables for animating the sprite
         this.sx = 510;
         this.sy = 0;
         this.animationtype = 1;  // either 1, 2 or 3. only 3 sprits for every diretcion
     }
 
-    // auxiliary method to generate the correct animation type for the Demon
+    // Method to generate the correct animation type for the Demon
     generateAnimationType() {
         switch (this.moveDirection) { 
             case 0: // up

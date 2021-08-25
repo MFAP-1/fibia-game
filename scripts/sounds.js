@@ -3,50 +3,50 @@
 
 // Sound for when the player engage in combat
 const engageCombatSound = new Audio();
-engageCombatSound.src = '../assets/audio/sword.flac';
+engageCombatSound.src = './assets/audio/sword.flac';
 engageCombatSound.volume = 0.3;
 
 // Sound for the Giant-Ant attack (monster #1)
 const giantAntAttackSound = new Audio();
-giantAntAttackSound.src = '../assets/audio/giant-ant.wav';
+giantAntAttackSound.src = './assets/audio/giant-ant.wav';
 giantAntAttackSound.volume = 0.4;
 
 // Sound for the Giant-Wasp attack (monster #2)
 const giantWaspAttackSound = new Audio();
-giantWaspAttackSound.src = '../assets/audio/giant-wasp.wav';
+giantWaspAttackSound.src = './assets/audio/giant-wasp.wav';
 giantWaspAttackSound.volume = 0.5;
 
 // Sound for the Giant-Spider attack (monster #3)
 const giantSpiderAttackSound = new Audio();
-giantSpiderAttackSound.src = '../assets/audio/giant-spider.mp3';
+giantSpiderAttackSound.src = './assets/audio/giant-spider.mp3';
 giantSpiderAttackSound.volume = 0.5;
 
 // Sound for the Demon attack (monster #4)
 const demonAttackSound = new Audio();
-demonAttackSound.src = '../assets/audio/demon-laugh.wav';
+demonAttackSound.src = './assets/audio/demon-laugh.wav';
 demonAttackSound.volume = 0.5;
 
 // Sound for when the player is walking
 const footstepSound = new Audio();
-footstepSound.src = '../assets/audio/footsteps.wav';
+footstepSound.src = './assets/audio/footsteps.wav';
 footstepSound.volume = 0.3;
 
 // Sound for when the player collects gold
 const goldCollectSound = new Audio();
-goldCollectSound.src = '../assets/audio/gold-collect.wav';
+goldCollectSound.src = './assets/audio/gold-collect.wav';
 goldCollectSound.volume = 0.3;
 
 // Sound for when the player drinks a potion
 const drinkingPotionSound = new Audio();
-drinkingPotionSound.src = '../assets/audio/potion.wav';
+drinkingPotionSound.src = './assets/audio/potion.wav';
 drinkingPotionSound.volume = 0.3;
 
 // Sound for the gameover
 const gameOverSound = new Audio();
-gameOverSound.src = '../assets/audio/gameOver.wav';
+gameOverSound.src = './assets/audio/gameOver.wav';
 gameOverSound.volume = 0.95;
 
 // Background track-sound for the game
 const backgroundSound = new Audio();
-backgroundSound.src = '../assets/audio/medieval-music.mp3';
+backgroundSound.src = './assets/audio/medieval-music.mp3';
 backgroundSound.volume = 0.1;
