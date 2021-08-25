@@ -315,6 +315,33 @@ class Monster extends Character {
         }
         return false; // if none of the testings above were true, that means: no collision!  Thus, return false.
     }
+
+
+    // Method to set the movement of the monster towards the palyer
+    chaseMovement() {
+        // Calculating the difference vector
+        let dx = player.coordX - this.coordX; // target - this position
+        let dy = player.coordY - this.coordY; // target - this position
+
+        // Calculating the direction vector
+        let length = Math.sqrt(dx * dx + dy * dy);
+        if (length) {
+            dx = dx / length;
+            dy = dy / length;
+        }
+
+        // Making the move
+        if (game.frames % this.moveCooldown === 0 && this.combat === false) { 
+            // Generating a new random move direciton for this iteration
+            this.moveDirection = Math.floor(Math.random() * 4);
+            this.coordX += dx * this.velocity;
+            this.coordY += dy * this.velocity;
+            if (this.monsterCollisionDetection()) {
+                this.coordX -= (dx * this.velocity) * 1.5; //  x1.5 for the monster to find a new path
+                this.coordY -= (dy * this.velocity);
+            }
+        }
+    }
 }
 
 

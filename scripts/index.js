@@ -116,7 +116,7 @@ const updateGame = () => {
     game.combatManager();
     
     // moving all monters to a random position
-    monsters.forEach(monster => { monster.randomMovement(); });
+    monsters.forEach(monster => { monster.chaseMovement(); });
 
     // Generating monsters on the screen
     monsterGenerator();
