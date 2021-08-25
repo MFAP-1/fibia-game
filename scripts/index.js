@@ -73,6 +73,11 @@ const updateGame = () => {
         }
     }
 
+    // updating the sprites of all players attack
+    // player.attackAnimation.forEach(element => { //(try#2)
+    player.drawAttackAnimation();
+    // });
+
     // updating the sprites of all the graves (if any) 
     for (let i = 0; i < graves.length; i++) {
         graves[i].coordX += 20;
@@ -220,7 +225,7 @@ function randomCoord() {
 // AUX-FUNCTION: To check the monster overlapping each other when generating a new one
 function overlappingMonster() {
     for (let i = 0; i < monsters.length; i++) { // outer loop: to check every element on the monsters array
-        console.log('Current comparing monster: ', monsters[i]);  //--------------------------------------DEBUGGER
+        //console.log('Current comparing monster: ', monsters[i]);  //--------------------------------------DEBUGGER
         // checking against the player sprite
         if (clashIdentifier(monsters[i], player)) {
             return true; // stops function and return true when one overlap is found

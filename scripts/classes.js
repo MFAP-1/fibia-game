@@ -29,7 +29,7 @@ class Game {
         context.fillText('GAME OVER :(', 250, 350);
     }
 
-    // Method To manage the combat actions and
+    // Method To manage the automated combat actions from the monsters toward the player
     combatManager() {
         if (game.frames % 60 === 0) { // every 60 frames (1 seconds)
             // player receiving dmg every iteration for every monsters in its surroundings
@@ -95,6 +95,13 @@ class Player extends Character {
         this.sx = 15;
         this.sy = 20;
         this.animationtype = 1;  // either 1 or 2. only 2 sprits for every diretcion
+        
+        this.attackAnimation = {
+            xPosition: 0,
+            yPosition: 0,
+            targetX: 0,
+            targetY: 0,
+        };
     }
 
     // 4 Methods to move the player arround 
@@ -191,6 +198,12 @@ class Player extends Character {
             if ((clickedX >= monster.coordX && clickedX <= monster.coordX + monster.width) &&
                 (clickedY >= monster.coordY && clickedY <= monster.coordY + monster.height)) {
                     engageCombatSound.play();
+                    // Updating the attack animation object/element
+                    player.attackAnimation.xPosition = player.coordX + player.width / 2;
+                    player.attackAnimation.yPosition = player.coordY + player.height / 2;
+                    player.attackAnimation.targetX = monster.coordX + monster.width / 2;
+                    player.attackAnimation.targetY = monster.coordY + monster.height / 2;
+                    // 
                     monster.health -= player.strength;
                     console.log('COMBATE (player atacando):', player.health, monster.health); //------------------------DEBUGGER
             }
@@ -236,6 +249,35 @@ class Player extends Character {
             this.animationtype = 1;
         }
     }
+
+     // Method to draw the player's attack animation 
+     drawAttackAnimation() {
+        if (player.attackAnimation.targetX !== 0) { // only render animation if there is a target
+            // checking the conditions for the end of the present animation
+            if ((Math.floor(player.attackAnimation.xPosition) >= Math.floor(player.attackAnimation.targetX) - 2) &&
+                (Math.floor(player.attackAnimation.xPosition) <= Math.floor(player.attackAnimation.targetX) + 2) 
+            ) { // +- 2 is the margin of error in the calculations
+                player.attackAnimation.xPosition = player.coordX + player.width / 2;
+                player.attackAnimation.yPosition = player.coordY + player.height / 2;
+                player.attackAnimation.targetX = 0;
+                player.attackAnimation.targetY = 0;
+            }
+            // Calculating the difference vector
+            let dx = player.attackAnimation.targetX - player.attackAnimation.xPosition;
+            let dy = player.attackAnimation.targetY - player.attackAnimation.yPosition;
+            // Calculating the direction vector
+            let length = Math.sqrt(dx * dx + dy * dy);
+            if (length) {
+                dx = dx / length;
+                dy = dy / length;
+            }
+            // updating the current value
+            player.attackAnimation.xPosition += dx * 5; // 5 pixels every frame 
+            player.attackAnimation.yPosition += dy * 5;
+            // rendering the animation
+            context.drawImage(playerAttackImg, 0, 0, 30, 30, player.attackAnimation.xPosition, player.attackAnimation.yPosition, 30, 30);   
+        }  
+    }
 }
 
 
@@ -270,9 +312,9 @@ class Monster extends Character {
             this.determineMoveDirection(dx, dy);
             this.coordX += dx * this.velocity;
             this.coordY += dy * this.velocity;
-            console.log(dx, dy); //-----------------------DEBUGGER
+            //console.log(dx, dy); //-----------------------DEBUGGER
             if (this.monsterCollisionDetection()) { // if there is a collision, revert the movement
-                this.coordX -= (dx * this.velocity) * 1.5; //  x1.5 for the monster to try finding a new path
+                this.coordX -= (dx * this.velocity);
                 this.coordY -= (dy * this.velocity);
             }
         }
@@ -282,7 +324,7 @@ class Monster extends Character {
     determineMoveDirection(dx, dy) {
         let angle = (Math.atan2(dy, dx) * 180 / Math.PI) * -1;
         if (angle < 0) { angle += 360; }
-        console.log('angulo = ', angle); //-----------------------DEBUGGER
+        //console.log('angulo = ', angle); //-----------------------DEBUGGER
         if (angle > 45 && angle < 135) {
             this.moveDirection = 0; // up
         } else if (angle > 225 && angle < 315){ // down

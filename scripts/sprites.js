@@ -36,3 +36,7 @@ goldImg.src = './assets/sprites/gold-coin.png';
 // Potion sprite
 let potionImg = new Image();
 potionImg.src = './assets/sprites/potion.png';
+
+// Player attack sprite
+let playerAttackImg = new Image();
+playerAttackImg.src = './assets/sprites/axe-sprite.png';
