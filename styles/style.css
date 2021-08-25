@@ -9,7 +9,7 @@
 
 /* Main */
 main {
-    background-image: url("../../assets/background/page-bg.jpeg");
+    background-image: url("../assets/background/page-bg.jpeg");
     background-size: cover;
     padding: 3rem 5rem;
     color: #cca06d;
@@ -28,7 +28,7 @@ canvas {
     background-size: cover; */
     
     /* OPTION 3 -- VENCENDO -- */
-    background-image: url('../../assets/background/arena-bg3.jpeg');
+    background-image: url('../assets/background/arena-bg3.jpeg');
     background-size: cover;
 
     /* OPTION 2 */
@@ -42,7 +42,7 @@ canvas {
 
 /* aside (instructions tab) */
 aside {
-    background-image: url("../../assets/background/scroll-paper.jpeg");
+    background-image: url("../assets/background/scroll-paper.jpeg");
     background-size: cover;
     background-position: top;
     padding: 2.0rem 1.5rem;
@@ -52,7 +52,7 @@ aside {
 
 /* Footer */
 footer {
-    background-image: url("../../assets/background/scroll-paper.jpeg");
+    background-image: url("../assets/background/scroll-paper.jpeg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: left;
