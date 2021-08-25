@@ -86,7 +86,7 @@ class Character {
 class Player extends Character {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity
-        super(coordX, coordY, 65, 65, playerImg, 150, 15, 32.5);
+        super(coordX, coordY, 65, 65, playerImg, 150, 15, 32);
 
         this.level = 1;
         this.experience = 0;
@@ -139,7 +139,7 @@ class Player extends Character {
         this.sx = 145;
         this.generateAnimationType();
         footstepSound.play();
-        if (this.playerCollisionDetection()) {
+        if (this.playerCollisionDetection()) {    
             this.coordX -= this.velocity;
         } else { 
             this.surroundingMonsters.forEach(monster => { monster.combat = false; });
@@ -247,43 +247,51 @@ class Monster extends Character {
 
         this.yieldExperience = yieldExperience; // amount of experience that it will yield to the player after
         this.combat = false; // not in combat
-        this.moveDirection = 0; // 0 - up, 1- down, 2- left and 3- right
+        this.moveDirection = 1; // 0 - up, 1- down, 2- left and 3- right
         this.moveCooldown = moveCooldown;
     }
 
-    // Method to randomize the movement for a monster
-    randomMovement() {
-        // This will happend if the monster isn't in combat, and every interval of time defined by the "moveCooldown" attribuite. Example: 120 frames (2 seconds) for the Rat class. 
+    // Method to set the movement of the monster towards the palyer
+    chasePlayer() {
+        // Calculating the difference vector
+        let dx = player.coordX + (player.width / 2) - this.coordX; // target - this position
+        let dy = player.coordY + (player.height / 2) - this.coordY; // target - this position
+        
+        // Calculating the direction vector
+        let length = Math.sqrt(dx * dx + dy * dy);
+        if (length) {
+            dx = dx / length;
+            dy = dy / length;
+        }
+        
+        // Making the move. This will happend if the monster isn't in combat, and every interval of time defined by the "moveCooldown" attribuite. Example: 120 frames (2 seconds) for the GiantAnt class. 
         if (game.frames % this.moveCooldown === 0 && this.combat === false) { 
             // Generating a new random move direciton for this iteration
-            this.moveDirection = Math.floor(Math.random() * 4);
-            switch (this.moveDirection) {  // switch statement to check the move direction and then move it
-                case 0: // up
-                    this.coordY -= this.velocity;
-                    if (this.monsterCollisionDetection()) { // if there was a collision with the intended movement
-                        this.coordY += this.velocity; // revert that movement
-                    }
-                    break;
-                case 1: // down
-                    this.coordY += this.velocity;
-                    if (this.monsterCollisionDetection()) { 
-                        this.coordY -= this.velocity; 
-                    }
-                    break;
-                case 2: // left
-                    this.coordX -= this.velocity;
-                    if (this.monsterCollisionDetection()) { 
-                        this.coordX += this.velocity; 
-                    }
-                    break;
-                case 3: // right
-                    this.coordX += this.velocity;
-                    if (this.monsterCollisionDetection()) { 
-                        this.coordX -= this.velocity;
-                    }
-                    break;
+            this.determineMoveDirection(dx, dy);
+            this.coordX += dx * this.velocity;
+            this.coordY += dy * this.velocity;
+            console.log(dx, dy); //-----------------------DEBUGGER
+            if (this.monsterCollisionDetection()) { // if there is a collision, revert the movement
+                this.coordX -= (dx * this.velocity) * 1.5; //  x1.5 for the monster to try finding a new path
+                this.coordY -= (dy * this.velocity);
             }
-        } 
+        }
+    }
+    
+    // Auxiliary Method to determine the direction of the current movement of the monster
+    determineMoveDirection(dx, dy) {
+        let angle = (Math.atan2(dy, dx) * 180 / Math.PI) * -1;
+        if (angle < 0) { angle += 360; }
+        console.log('angulo = ', angle); //-----------------------DEBUGGER
+        if (angle > 45 && angle < 135) {
+            this.moveDirection = 0; // up
+        } else if (angle > 225 && angle < 315){ // down
+            this.moveDirection = 1; // down
+        } else if (angle > 135 && angle < 225) { // left
+            this.moveDirection = 2; // left
+        } else { // right
+            this.moveDirection = 3; // right
+        }
     }
 
     // Method to cause damage to the player if it is colliding with one or plus monster(s)
@@ -292,7 +300,7 @@ class Monster extends Character {
         this.sound.play();
         console.log('COMBATE (monstro atacando):', player.health, this.health); //-----------------------DEBUGGER
     }
-
+    
     // Method to check if there is a collision (triggered by a monster)
     monsterCollisionDetection() {
         //console.log('Surrounding (triggered by monster)=',player.surroundingMonsters); // --------------DEBUGGER
@@ -315,33 +323,6 @@ class Monster extends Character {
         }
         return false; // if none of the testings above were true, that means: no collision!  Thus, return false.
     }
-
-
-    // Method to set the movement of the monster towards the palyer
-    chaseMovement() {
-        // Calculating the difference vector
-        let dx = player.coordX - this.coordX; // target - this position
-        let dy = player.coordY - this.coordY; // target - this position
-
-        // Calculating the direction vector
-        let length = Math.sqrt(dx * dx + dy * dy);
-        if (length) {
-            dx = dx / length;
-            dy = dy / length;
-        }
-
-        // Making the move
-        if (game.frames % this.moveCooldown === 0 && this.combat === false) { 
-            // Generating a new random move direciton for this iteration
-            this.moveDirection = Math.floor(Math.random() * 4);
-            this.coordX += dx * this.velocity;
-            this.coordY += dy * this.velocity;
-            if (this.monsterCollisionDetection()) {
-                this.coordX -= (dx * this.velocity) * 1.5; //  x1.5 for the monster to find a new path
-                this.coordY -= (dy * this.velocity);
-            }
-        }
-    }
 }
 
 
@@ -349,7 +330,7 @@ class Monster extends Character {
 class GiantAnt extends Monster {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
-        super(coordX, coordY, 65, 65, monster1Img, 20, 3, 32.5, 250, 120);
+        super(coordX, coordY, 65, 65, monster1Img, 20, 3, 32, 250, 120);
         this.sound = giantAntAttackSound;
         this.monsterId = 1;
         // variables for animating the sprite
@@ -437,7 +418,7 @@ class GiantAnt extends Monster {
 class GiantWasp extends Monster {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
-        super(coordX, coordY, 65, 65, monster2Img, 35, 5, 48.75, 350, 105);
+        super(coordX, coordY, 65, 65, monster2Img, 35, 5, 48, 350, 105);
         this.monsterId = 2;
         this.sound = giantWaspAttackSound;
         // variables for animating the sprite
@@ -514,7 +495,7 @@ class GiantWasp extends Monster {
 class GiantSpider extends Monster {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
-        super(coordX, coordY, 65, 65, monster3Img, 50, 7, 48.75, 500, 90);
+        super(coordX, coordY, 65, 65, monster3Img, 50, 7, 48, 500, 90);
         this.monsterId = 3;
         this.sound = giantSpiderAttackSound;
         // variables for animating the sprite
@@ -590,7 +571,7 @@ class GiantSpider extends Monster {
 class Demon extends Monster {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
-        super(coordX, coordY, 65, 65,  monster4Img, 100, 15, 65, 1000, 60);
+        super(coordX, coordY, 65, 65,  monster4Img, 100, 15, 64, 1000, 60);
         this.monsterId = 4;
         this.sound = demonAttackSound;
         // variables for animating the sprite

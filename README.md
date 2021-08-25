@@ -25,5 +25,6 @@ The Fibia game-project was inspired in a classic MMORPG Tibia (https://www.tibia
 You can find sprites and sounds in the following links:
 >* https://forums.tibiabr.com/threads/440293-Sprites-8-60
 >* https://www.tibiamisterios.com.br/2017/11/nova-outfit-e-montaria-winter-update.html
+>* https://xtibia.com/forum/topic/242851-sprites-simples/
 >* https://freesound.org/ 
 >*
