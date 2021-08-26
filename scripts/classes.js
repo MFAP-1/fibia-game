@@ -27,6 +27,8 @@ class Game {
         context.font = '30px MedievalSharp, cursive';
         context.fillStyle = 'bisque';
         context.fillText('GAME OVER :(', 250, 350);
+        context.font = '20px MedievalSharp, cursive';
+        context.fillText('Reload the page to try again', 220, 400);
     }
 
     // Method To manage the automated combat actions from the monsters toward the player
@@ -165,8 +167,8 @@ class Player extends Character {
         this.experience = 0;
         this.goldColleted = 0;
         this.surroundingMonsters = [];
-        this.sx = 15;
-        this.sy = 20;
+        this.sx = 5;
+        this.sy = 0;
         this.animationtype = 1;  // either 1 or 2. only 2 sprits for every diretcion
         this.attackImg = playerAttackImg; // all images comes from 'sprites.js'.
     }
@@ -174,8 +176,7 @@ class Player extends Character {
     // 4 Methods to move the player arround 
     moveUp() {
         this.coordY -= this.velocity;
-        this.sx = 80; // to change the sprite's animation
-        this.generateAnimationType(); // to change the sprite's animation
+        this.sy = 100; // to change the sprite's animation
         footstepSound.play();
         if (this.playerCollisionDetection()) { // if there is a collision with the intended movement
             this.coordY += this.velocity; // revert that movement
@@ -186,8 +187,7 @@ class Player extends Character {
     }
     moveDown() {
         this.coordY += this.velocity;
-        this.sx = 15;
-        this.generateAnimationType(); 
+        this.sy = 0;
         footstepSound.play();
         if (this.playerCollisionDetection()) {
             this.coordY -= this.velocity;
@@ -198,8 +198,7 @@ class Player extends Character {
     }
     moveLeft() {
         this.coordX -= this.velocity;
-        this.sx = 212;
-        this.generateAnimationType();
+        this.sy = 140;
         footstepSound.play();
         if (this.playerCollisionDetection()) {
             this.coordX += this.velocity;
@@ -210,8 +209,7 @@ class Player extends Character {
     }
     moveRight() {
         this.coordX += this.velocity;
-        this.sx = 145;
-        this.generateAnimationType();
+        this.sy = 50;
         footstepSound.play();
         if (this.playerCollisionDetection()) {    
             this.coordX -= this.velocity;
@@ -273,7 +271,7 @@ class Player extends Character {
                     player.attackAnimation.targetY = monster.coordY + monster.height / 2;
                     // 
                     monster.health -= player.strength;
-                    console.log('COMBATE (player atacando):', player.health, monster.health); //------------------------DEBUGGER
+                    //console.log('COMBATE (player atacando):', player.health, monster.health); //------------------------DEBUGGER
             }
         });
     }
@@ -305,17 +303,6 @@ class Player extends Character {
     // Method to update and animate the sprite of the player
     animateSprite() {
         context.drawImage(this.image, this.sx, this.sy, 45, 45, this.coordX, this.coordY, this.width, this.height);
-    }
-
-    // auxiliary method
-    generateAnimationType() {
-        if (this.animationtype === 1) { 
-            this.sy = 83;
-            this.animationtype = 2;
-        } else {
-            this.sy = 20;
-            this.animationtype = 1;
-        }
     }
 }
 
@@ -387,7 +374,7 @@ class Monster extends Character {
         this.attackAnimation.targetY = player.coordY + player.height / 2;
         // decreasing the player's health
         player.health -= this.strength; 
-        console.log('COMBATE (monstro atacando):', player.health, this.health); //-----------------------DEBUGGER
+        //console.log('COMBATE (monstro atacando):', player.health, this.health); //-----------------------DEBUGGER
     }
     
     // Method to check if there is a collision (triggered by a monster)

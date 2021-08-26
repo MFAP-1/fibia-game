@@ -121,6 +121,12 @@ window.onload = () => {
         let clickedY = event.pageY - canvas.offsetTop + canvas.clientTop;
         player.attacking(clickedX, clickedY);
     });
+
+    // LISTENER: waiting for the 'click' command from the mouse, to reset the game
+    const resetBtnElement = document.getElementById('reset-btn');
+    resetBtnElement.onclick = () => {
+        window.location.reload();
+    }
 }
 
 
@@ -185,7 +191,7 @@ function overlappingMonster() {
         // checking against live monsters
         for (let j = i + 1; j < monsters.length; j++) { // 
             if (clashIdentifier(monsters[i], monsters[j])) {
-                console.log('!!!entrou no IF DA FUNCÇÃO DE CHECKAR!!!');  //--------------------------------------DEBUGGER
+                //console.log('!!!entrou no IF DA FUNCÇÃO DE CHECKAR!!!');  //--------------------------------------DEBUGGER
                 return true; // stops function and return true when one overlap is found
             }
         }

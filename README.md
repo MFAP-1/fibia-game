@@ -1,9 +1,9 @@
 # Fibia, the game
 
-        PRINT AQUI OU GIF
+        <img src="./assets/background/fibia-gameplay.gif" width="40" height="40" />
 
 ## About the game
-Fibia is a 2d tile based RPG *(Role Playing Game)*. As such, you gain experience by slaying monsters in the arena, and when you level up, more challenging monsters will come after you.
+Fibia is a 2d classic tile based RPG *(Role Playing Game)*. As such, you gain experience by slaying monsters in the arena. When you level up, more challenging monsters will come after you.
 
 ## Play it now!
 Just follow the live link: https://mfap-1.github.io/fibia-game/.
