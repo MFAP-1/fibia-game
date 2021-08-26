@@ -293,7 +293,6 @@ class Monster extends Character {
         this.combat = false; // not in combat
         this.moveDirection = 1; // 0 - up, 1- down, 2- left and 3- right
         this.moveCooldown = moveCooldown;
-        this.attackImg = monsterAttackImg;
     }
 
     // Method to set the movement of the monster towards the palyer
@@ -383,9 +382,10 @@ class Monster extends Character {
 class GiantAnt extends Monster {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
-        super(coordX, coordY, 65, 65, giantAnt, 20, 3, 32, 250, 120);
-        this.sound = giantAntAttackSound;
+        super(coordX, coordY, 65, 65, giantAntImg, 20, 3, 32, 250, 120);
         this.monsterId = 1;
+        this.sound = giantAntAttackSound;
+        this.attackImg = giantAntAttackImg;
         // variables for animating the sprite
         this.sx = 780;
         this.sy = 10;
@@ -471,9 +471,10 @@ class GiantAnt extends Monster {
 class GiantWasp extends Monster {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
-        super(coordX, coordY, 65, 65, giantWasp, 35, 5, 48, 350, 105);
+        super(coordX, coordY, 65, 65, giantWaspImg, 35, 5, 48, 350, 105);
         this.monsterId = 2;
         this.sound = giantWaspAttackSound;
+        this.attackImg = giantWaspAttackImg;
         // variables for animating the sprite
         this.sx = 120;
         this.sy = 0;
@@ -551,6 +552,7 @@ class GiantSpider extends Monster {
         super(coordX, coordY, 65, 65, giantSpiderImg, 50, 7, 48, 500, 90);
         this.monsterId = 3;
         this.sound = giantSpiderAttackSound;
+        this.attackImg = giantSpiderAttackImg;
         // variables for animating the sprite
         this.sx = 120;
         this.sy = 5;
@@ -626,6 +628,7 @@ class Demon extends Monster {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
         super(coordX, coordY, 65, 65,  demonImg, 100, 15, 64, 1000, 60);
         this.monsterId = 4;
+        this.attackImg = demonAttackImg;
         this.sound = demonAttackSound;
         // variables for animating the sprite
         this.sx = 510;

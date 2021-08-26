@@ -23,6 +23,7 @@ To see a slide presentation, just follow the link: xxxxxxx.
 The Fibia game-project was inspired in a classic MMORPG Tibia (https://www.tibia.com/), and it was built solely for education purposes. Thus, I do not own any copyrights to  sprites nor sounds used in this project.
 
 You can find sprites and sounds in the following links:
+>* https://tibia.fandom.com/
 >* https://forums.tibiabr.com/threads/440293-Sprites-8-60
 >* https://www.tibiamisterios.com.br/2017/11/nova-outfit-e-montaria-winter-update.html
 >* https://xtibia.com/forum/topic/242851-sprites-simples/
