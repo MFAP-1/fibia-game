@@ -1,5 +1,5 @@
 # Fibia, the game
-<p style='align:center;'> <img src="https://media.giphy.com/media/h4zBU0vPdDEGL2wG2C/giphy.gif?cid=790b7611db75690129976b7e341ec794b3dc69a6c836a6eb&rid=giphy.gif&ct=g"/> </p>
+<p align='center'> <img src="https://media.giphy.com/media/h4zBU0vPdDEGL2wG2C/giphy.gif?cid=790b7611db75690129976b7e341ec794b3dc69a6c836a6eb&rid=giphy.gif&ct=g"/> </p>
 
 ## About the game
 Fibia is a 2d classic tile based RPG *(Role Playing Game)*. As such, you gain experience by slaying monsters in the arena. When you level up, more challenging monsters will come after you.
