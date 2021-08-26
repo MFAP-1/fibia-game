@@ -26,9 +26,9 @@ class Game {
         gameOverSound.play();
         context.font = '30px MedievalSharp, cursive';
         context.fillStyle = 'bisque';
-        context.fillText('GAME OVER :(', 250, 350);
+        context.fillText('GAME OVER :(', 250, 300);
         context.font = '20px MedievalSharp, cursive';
-        context.fillText('Use the Reset button to play again', 220, 400);
+        context.fillText('Use the Reset button to play again', 180, 350);
     }
 
     // Method To manage the automated combat actions from the monsters toward the player
@@ -169,7 +169,6 @@ class Player extends Character {
         this.surroundingMonsters = [];
         this.sx = 5;
         this.sy = 0;
-        this.animationtype = 1;  // either 1 or 2. only 2 sprits for every diretcion
         this.attackImg = playerAttackImg; // all images comes from 'sprites.js'.
     }
 
