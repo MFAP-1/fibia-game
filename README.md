@@ -5,7 +5,7 @@
 Fibia is a 2d classic tile based RPG *(Role Playing Game)*. As such, you gain experience by slaying monsters in the arena. When you level up, more challenging monsters will come after you.
 
 ## Play it now!
-Just follow the live link: https://mfap-1.github.io/fibia-game/.
+Just follow the live link: <a href="https://mfap-1.github.io/fibia-game/">Play Fibia</a>.
 
 ## Installing
 Clone or download this repository. Run the index.html and let me know what you think.
@@ -26,4 +26,3 @@ You can find sprites and sounds in the following links:
 >* https://forums.tibiabr.com/threads/440293-Sprites-8-60
 >* https://xtibia.com/forum/topic/242851-sprites-simples/
 >* https://freesound.org/ 
->*
