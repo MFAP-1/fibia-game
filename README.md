@@ -1,7 +1,6 @@
 # Fibia, the game
-
-        <img src="./assets/background/fibia-gameplay.gif" width="40" height="40" />
-
+        <p align="center"> <img src="https://media.giphy.com/media/h4zBU0vPdDEGL2wG2C/giphy.gif?cid=790b7611db75690129976b7e341ec794b3dc69a6c836a6eb&rid=giphy.gif&ct=g"/> </p>
+width="300" height="310"
 ## About the game
 Fibia is a 2d classic tile based RPG *(Role Playing Game)*. As such, you gain experience by slaying monsters in the arena. When you level up, more challenging monsters will come after you.
 
@@ -25,7 +24,6 @@ The Fibia game-project was inspired in a classic MMORPG Tibia (https://www.tibia
 You can find sprites and sounds in the following links:
 >* https://tibia.fandom.com/
 >* https://forums.tibiabr.com/threads/440293-Sprites-8-60
->* https://www.tibiamisterios.com.br/2017/11/nova-outfit-e-montaria-winter-update.html
 >* https://xtibia.com/forum/topic/242851-sprites-simples/
 >* https://freesound.org/ 
 >*

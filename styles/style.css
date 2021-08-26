@@ -39,11 +39,23 @@ h1 {
 
 #status-bar {
     width: 650px;
+    height: 4vh;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    align-items: center;
+    background-image: url("../assets/background/scroll-paper.jpeg");
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: black;
+    font-size: 1.1rem;
 }
 
+#reset-btn {
+    width: 100px;
+    height: 3.8vh;
+}
 
 /* Canvas */
 canvas {

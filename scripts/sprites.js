@@ -3,8 +3,6 @@
 All sprites were download at: 
 * https://tibia.fandom.com/
 * https://forums.tibiabr.com/threads/440293-Sprites-8-60
-* https://www.tibiamisterios.com.br/2017/11/nova-outfit-e-montaria-winter-update.html
-* 
 */
 
 // Player's sprite

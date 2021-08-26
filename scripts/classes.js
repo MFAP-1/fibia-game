@@ -28,7 +28,7 @@ class Game {
         context.fillStyle = 'bisque';
         context.fillText('GAME OVER :(', 250, 350);
         context.font = '20px MedievalSharp, cursive';
-        context.fillText('Reload the page to try again', 220, 400);
+        context.fillText('Use the Reset button to play again', 220, 400);
     }
 
     // Method To manage the automated combat actions from the monsters toward the player
