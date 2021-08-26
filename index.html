@@ -12,7 +12,6 @@
 
     <!-- links -->
     <link rel="stylesheet" href="./styles/style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,8 +20,8 @@
 </head>
 <body>
 
-    <main class="d-flex align-items-center">
-        <div class="container d-flex flex-column align-items-center">
+    <main>
+        <div id="main-container">
             <h1>Fibia, the game</h1>
             <div>
                 level: <span id='level-display'>1</span>
@@ -31,31 +30,30 @@
             <canvas id="the-canvas" width="650" height="650"></canvas>
         </div>
         <aside>
-            <h4 class="text-center">Commands:</h4>
+            <h3>Commands:</h3>
             <ul>
                 <li>Move your character with WASD or arrow keys;</li>
                 <li>Attack a nearby monster by just clicking with your mouse;</li>
                 <li>Pick-up loot by simpling walking over it (gold coins and potions).</li>
             </ul>
             <hr>
-            <h4 class="text-center">Goals:</h4>
+            <h3>Goals:</h3>
             <ul>
                 <li>Gather gold coins;</li>
                 <li>Kill monsters to gain levels;</li>
                 <li>Have fun.</li>
             </ul>
             <hr>
-            <h4 class="text-center">Be cautious:</h4>
-            <p class="text-center">Whenever you are near a monster, it will not hesitate to attack you.</p>
-            
+            <h3>Be cautious:</h3>
+            <p>Whenever you are near a monster, it will not hesitate to attack you.</p>
         </aside>
     </main>
     
     
-    <footer class="text-center text-lg-start text-black">
-        <div class="text-center p-3">
+    <footer>
+        <div id="copyright-text">
             © Copyright 2021: by
-            <a class="text-black" href="https://github.com/MFAP-1">MFAP-1</a>.
+            <a href="https://github.com/MFAP-1">MFAP-1</a>.
         </div>
     </footer>
 

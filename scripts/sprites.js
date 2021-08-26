@@ -10,20 +10,20 @@ let playerImg = new Image();
 playerImg.src = './assets/sprites/player.png';
 
 // Monster sprits # 1: GiantAnt
-let monster1Img = new Image();
-monster1Img.src = './assets/sprites/giant-ant.png';
+let giantAnt = new Image();
+giantAnt.src = './assets/sprites/giant-ant.png';
 
 // Monster sprits # 2: GiantWasp
-let monster2Img = new Image();
-monster2Img.src = './assets/sprites/giant-wasp.png';
+let giantWasp = new Image();
+giantWasp.src = './assets/sprites/giant-wasp.png';
 
 // Monster sprits # 3: GiantSpider
-let monster3Img = new Image();
-monster3Img.src = './assets/sprites/giant-spider.png';
+let giantSpiderImg = new Image();
+giantSpiderImg.src = './assets/sprites/giant-spider.png';
 
 // Monster sprits # 4: Demon
-let monster4Img = new Image();
-monster4Img.src = './assets/sprites/demon.png';
+let demonImg = new Image();
+demonImg.src = './assets/sprites/demon.png';
 
 // Grave sprite
 let graveImg = new Image();
@@ -40,3 +40,7 @@ potionImg.src = './assets/sprites/potion.png';
 // Player attack sprite
 let playerAttackImg = new Image();
 playerAttackImg.src = './assets/sprites/axe-sprite.png';
+
+// Monster attack sprite
+let monsterAttackImg = new Image();
+monsterAttackImg.src = './assets/sprites/fire-dmg.png';

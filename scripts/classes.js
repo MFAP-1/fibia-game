@@ -51,6 +51,13 @@ class Character {
         this.strength = strength;
         this.velocity = velocity;
         this.alive = true;
+        // object for rendering the attack animations
+        this.attackAnimation = {
+            xPosition: 0,
+            yPosition: 0,
+            targetX: 0,
+            targetY: 0,
+        };
     }
 
     // Method to update the sprite of any given character
@@ -79,6 +86,35 @@ class Character {
     bottom() {
         return this.coordY + this.height;
     }
+
+     // Method to render the character's attack animation (either player or monster)
+     renderAttackAnimation() {
+        if (this.attackAnimation.targetX !== 0) { // only render animation if there is a target
+            // checking the conditions for the end of the present animation
+            if ((Math.floor(this.attackAnimation.xPosition) >= Math.floor(this.attackAnimation.targetX) - 2) &&
+                (Math.floor(this.attackAnimation.xPosition) <= Math.floor(this.attackAnimation.targetX) + 2) 
+            ) { // +- 2 is the margin of error in the calculations
+                this.attackAnimation.xPosition = this.coordX + this.width / 2;
+                this.attackAnimation.yPosition = this.coordY + this.height / 2;
+                this.attackAnimation.targetX = 0;
+                this.attackAnimation.targetY = 0;
+            }
+            // Calculating the difference vector
+            let dx = this.attackAnimation.targetX - this.attackAnimation.xPosition;
+            let dy = this.attackAnimation.targetY - this.attackAnimation.yPosition;
+            // Calculating the direction vector
+            let length = Math.sqrt(dx * dx + dy * dy);
+            if (length) {
+                dx = dx / length;
+                dy = dy / length;
+            }
+            // updating the current value
+            this.attackAnimation.xPosition += dx * 5; // 5 pixels every frame 
+            this.attackAnimation.yPosition += dy * 5;
+            // rendering the animation
+            context.drawImage(this.attackImg, 0, 0, 30, 30, this.attackAnimation.xPosition, this.attackAnimation.yPosition, 30, 30);   
+        }  
+    }
 }
 
 
@@ -95,13 +131,7 @@ class Player extends Character {
         this.sx = 15;
         this.sy = 20;
         this.animationtype = 1;  // either 1 or 2. only 2 sprits for every diretcion
-        
-        this.attackAnimation = {
-            xPosition: 0,
-            yPosition: 0,
-            targetX: 0,
-            targetY: 0,
-        };
+        this.attackImg = playerAttackImg;
     }
 
     // 4 Methods to move the player arround 
@@ -197,6 +227,7 @@ class Player extends Character {
         this.surroundingMonsters.forEach(monster => {
             if ((clickedX >= monster.coordX && clickedX <= monster.coordX + monster.width) &&
                 (clickedY >= monster.coordY && clickedY <= monster.coordY + monster.height)) {
+                    // playing the sound
                     engageCombatSound.play();
                     // Updating the attack animation object/element
                     player.attackAnimation.xPosition = player.coordX + player.width / 2;
@@ -249,35 +280,6 @@ class Player extends Character {
             this.animationtype = 1;
         }
     }
-
-     // Method to draw the player's attack animation 
-     drawAttackAnimation() {
-        if (player.attackAnimation.targetX !== 0) { // only render animation if there is a target
-            // checking the conditions for the end of the present animation
-            if ((Math.floor(player.attackAnimation.xPosition) >= Math.floor(player.attackAnimation.targetX) - 2) &&
-                (Math.floor(player.attackAnimation.xPosition) <= Math.floor(player.attackAnimation.targetX) + 2) 
-            ) { // +- 2 is the margin of error in the calculations
-                player.attackAnimation.xPosition = player.coordX + player.width / 2;
-                player.attackAnimation.yPosition = player.coordY + player.height / 2;
-                player.attackAnimation.targetX = 0;
-                player.attackAnimation.targetY = 0;
-            }
-            // Calculating the difference vector
-            let dx = player.attackAnimation.targetX - player.attackAnimation.xPosition;
-            let dy = player.attackAnimation.targetY - player.attackAnimation.yPosition;
-            // Calculating the direction vector
-            let length = Math.sqrt(dx * dx + dy * dy);
-            if (length) {
-                dx = dx / length;
-                dy = dy / length;
-            }
-            // updating the current value
-            player.attackAnimation.xPosition += dx * 5; // 5 pixels every frame 
-            player.attackAnimation.yPosition += dy * 5;
-            // rendering the animation
-            context.drawImage(playerAttackImg, 0, 0, 30, 30, player.attackAnimation.xPosition, player.attackAnimation.yPosition, 30, 30);   
-        }  
-    }
 }
 
 
@@ -291,6 +293,7 @@ class Monster extends Character {
         this.combat = false; // not in combat
         this.moveDirection = 1; // 0 - up, 1- down, 2- left and 3- right
         this.moveCooldown = moveCooldown;
+        this.attackImg = monsterAttackImg;
     }
 
     // Method to set the movement of the monster towards the palyer
@@ -338,8 +341,16 @@ class Monster extends Character {
 
     // Method to cause damage to the player if it is colliding with one or plus monster(s)
     causeDamage() {
-        player.health -= this.strength; 
+        // playing the sound
+        this.sound.pause(); // interrupting longer sounds that lingers one iteration to the other
         this.sound.play();
+        // Updating the attack animation object/element
+        this.attackAnimation.xPosition = this.coordX + this.width / 2;
+        this.attackAnimation.yPosition = this.coordY + this.height / 2;
+        this.attackAnimation.targetX = player.coordX + player.width / 2;
+        this.attackAnimation.targetY = player.coordY + player.height / 2;
+        // decreasing the player's health
+        player.health -= this.strength; 
         console.log('COMBATE (monstro atacando):', player.health, this.health); //-----------------------DEBUGGER
     }
     
@@ -372,7 +383,7 @@ class Monster extends Character {
 class GiantAnt extends Monster {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
-        super(coordX, coordY, 65, 65, monster1Img, 20, 3, 32, 250, 120);
+        super(coordX, coordY, 65, 65, giantAnt, 20, 3, 32, 250, 120);
         this.sound = giantAntAttackSound;
         this.monsterId = 1;
         // variables for animating the sprite
@@ -460,7 +471,7 @@ class GiantAnt extends Monster {
 class GiantWasp extends Monster {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
-        super(coordX, coordY, 65, 65, monster2Img, 35, 5, 48, 350, 105);
+        super(coordX, coordY, 65, 65, giantWasp, 35, 5, 48, 350, 105);
         this.monsterId = 2;
         this.sound = giantWaspAttackSound;
         // variables for animating the sprite
@@ -537,7 +548,7 @@ class GiantWasp extends Monster {
 class GiantSpider extends Monster {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
-        super(coordX, coordY, 65, 65, monster3Img, 50, 7, 48, 500, 90);
+        super(coordX, coordY, 65, 65, giantSpiderImg, 50, 7, 48, 500, 90);
         this.monsterId = 3;
         this.sound = giantSpiderAttackSound;
         // variables for animating the sprite
@@ -613,7 +624,7 @@ class GiantSpider extends Monster {
 class Demon extends Monster {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity, yieldExperience, moveCooldown
-        super(coordX, coordY, 65, 65,  monster4Img, 100, 15, 64, 1000, 60);
+        super(coordX, coordY, 65, 65,  demonImg, 100, 15, 64, 1000, 60);
         this.monsterId = 4;
         this.sound = demonAttackSound;
         // variables for animating the sprite

@@ -45,7 +45,8 @@ const updateGame = () => {
     for (let i = 0; i < monsters.length; i++) {
         if (!monsters[i].checkDeath()) { // if the monster still alive, update it
             monsters[i].animateSprite();
-            monstersHealthBar[i].updateHealthBar(monsters[i].coordX, monsters[i].coordY, monsters[i].health);   
+            monstersHealthBar[i].updateHealthBar(monsters[i].coordX, monsters[i].coordY, monsters[i].health);
+            monsters[i].renderAttackAnimation();   
         } else { // if the monster is dead, do:
             console.log('monster morreu'); //-------------------------------DEBUGGER
             
@@ -74,9 +75,7 @@ const updateGame = () => {
     }
 
     // updating the sprites of all players attack
-    // player.attackAnimation.forEach(element => { //(try#2)
-    player.drawAttackAnimation();
-    // });
+    player.renderAttackAnimation();
 
     // updating the sprites of all the graves (if any) 
     for (let i = 0; i < graves.length; i++) {
