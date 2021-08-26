@@ -82,16 +82,27 @@ const updateGame = () => {
 
 // FUNCTION: Waiting for the screen to load (store the listening)
 window.onload = () => {    
-    // LISTENER: tracking the moviment keys for the player
+    // LISTENER: tracking the moviment keys for the player (used to move the player OR set the level of difficulty)
     document.addEventListener('keyup', (event) => {
         switch (event.keyCode) {
             case 38: // arrow key up
             case 87: // 'w'
-                player.moveUp();    
+                player.moveUp();
+                // if statement to set up the game difficulty in the menu screen
+                if (game.difficulty === 2 && !game.animationId) { 
+                    game.difficulty = 1;
+                } else if (game.difficulty === 3 && !game.animationId) {
+                    game.difficulty = 2;
+                } 
                 break;
             case 40: // arrow key down
             case 83: // 's'
-                player.moveDown();  
+                player.moveDown();
+                if (game.difficulty === 1 && !game.animationId) {
+                    game.difficulty = 2;
+                } else if (game.difficulty === 2 && !game.animationId) {
+                    game.difficulty = 3;
+                }   
                 break;
             case 37: // arrow key left
             case 65: // 'a'
@@ -108,7 +119,9 @@ window.onload = () => {
     // LISTENER: waiting for the 'ENTER' command on the menu, to start
     document.addEventListener('keyup', (event) => {
         if (event.keyCode === 13) { // enter
-            updateGame();
+            cancelAnimationFrame(game.menuId); // stop menu render-loop
+            game.difficultyCalibration();// setting up the characters status based on the difficulty level selected
+            updateGame(); // calling the main function of this game
             backgroundSound.play(); // playing the background music
         }
     });

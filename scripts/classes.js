@@ -5,18 +5,56 @@ class Game {
     constructor() {
         this.frames = 0;
         this.animationId;
+        this.menuId;
+        this.difficulty = 2; // 1 to easy, 2 to normal and 3 to hard
     }
 
     // Method to render the main menu screen
     menu () {
+        context.fillStyle = 'black';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.font = '40px MedievalSharp, cursive';
+        context.fillStyle = '#cca06d';
+        context.fillText('Welcome to Fibia', 180, 120);
         context.font = '30px MedievalSharp, cursive';
+        context.fillText('Select the desired difficulty level', 100, 260);
+        context.fillText(' and press enter to play:', 150, 300);
         context.fillStyle = 'bisque';
-        context.fillText('PRESS ENTER TO PLAY.', 160, 340);
+        context.font = '20px MedievalSharp, cursive';
+        context.fillText('Easy', 200, 340);
+        context.fillText('Normal', 200, 380);
+        context.fillText('Hard', 200, 420);
+        // options to set the difficulty level
+        if (game.difficulty === 1) { 
+            context.fillText('#', 180, 340); 
+        } else if (game.difficulty === 2) {
+            context.fillText('#', 180, 380);
+        } else {
+            context.fillText('#', 180, 420);
+        }
+        // looping to render the updated position of the '#' icon
+        game.menuId = requestAnimationFrame(game.menu);
     }
 
-    // Method to To clear the canvas
+    // Method to clear the canvas
     clearCanvas() {
         context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // Method to calibrate all characters stats based on the difficulty level selected
+    difficultyCalibration() {
+        let calibrationFactor = 1;
+        if (this.difficulty === 1) { // easy
+        calibrationFactor = 1.25;
+        } else if (this.difficulty === 2) { // normal
+            calibrationFactor = 1;
+        } else if (this.difficulty === 3) { // hard
+            calibrationFactor = 0.50;
+        }
+        // Calibrating player status
+        player.health = player.health * calibrationFactor;
+        player.strength = player.strength * calibrationFactor;
+        playerHealthBar.maxHealth = player.health;
     }
 
     // Method to render the game over screen
@@ -288,8 +326,8 @@ class Player extends Character {
         // looting potions
         potions.forEach((potion, index) => {
             if(clashIdentifier(player, potion)) {
-                if (this.health < 75) { this.health += 75; }
-                else if (this.health >= 75) { this.health = 150; }
+                if (this.health <  playerHealthBar.maxHealth / 2) { this.health +=  playerHealthBar.maxHealth / 2; }
+                else if (this.health >=  playerHealthBar.maxHealth / 2) { this.health =  playerHealthBar.maxHealth; }
                 drinkingPotionSound.play();
                 potions.splice(index, 1); // removing the gold from the game
             }
