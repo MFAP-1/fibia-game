@@ -6,9 +6,9 @@
     font-family: 'MedievalSharp', cursive;
 }
 
-/* body {
+body {
     height: 100vh;
-} */
+}
 
 /* Main */
 main {
@@ -84,7 +84,6 @@ hr {
     height: 1px;
     opacity: 0.25;
 }
-
 
 
 /* Footer */

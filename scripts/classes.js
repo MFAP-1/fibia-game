@@ -36,6 +36,43 @@ class Game {
             player.surroundingMonsters.forEach(monster => { monster.causeDamage(); });
         }   
     }
+
+    // Method to update all static sprites (graves, potions, gold coins)
+    updateStaticSprites() {
+        // updating the sprites of all the graves (if any) 
+        for (let i = 0; i < graves.length; i++) {
+            graves[i].coordX += 20;
+            graves[i].coordY += 20;
+            graves[i].image = graveImg;
+            graves[i].width = 45;
+            graves[i].height = 45;
+            graves[i].renderStaticSprite();
+            graves[i].coordX -= 20;
+            graves[i].coordY -= 20;
+        }
+        // updating the sprites of all the gold (if any) 
+        for (let i = 0; i < goldCoins.length; i++) {
+            goldCoins[i].coordX += 20;
+            goldCoins[i].coordY += 35;
+            goldCoins[i].image = goldImg;
+            goldCoins[i].width = 20;
+            goldCoins[i].height = 20;
+            goldCoins[i].renderStaticSprite();
+            goldCoins[i].coordX -= 20;
+            goldCoins[i].coordY -= 35;
+        }
+        // updating the sprites of all the potions (if any) 
+        for (let i = 0; i < potions.length; i++) {
+            potions[i].coordX += 20;
+            potions[i].coordY += 45;
+            potions[i].image = potionImg;
+            potions[i].width = 20;
+            potions[i].height = 20;
+            potions[i].renderStaticSprite();
+            potions[i].coordX -= 20;
+            potions[i].coordY -= 45;
+        }
+    }
 }
 
 
@@ -60,8 +97,8 @@ class Character {
         };
     }
 
-    // Method to update the sprite of any given character
-    updateSprite() {
+    // Method to render the static sprite of any given character
+    renderStaticSprite() {
         context.drawImage(this.image, this.coordX, this.coordY, this.width, this.height);
     }
 
@@ -131,7 +168,7 @@ class Player extends Character {
         this.sx = 15;
         this.sy = 20;
         this.animationtype = 1;  // either 1 or 2. only 2 sprits for every diretcion
-        this.attackImg = playerAttackImg;
+        this.attackImg = playerAttackImg; // all images comes from 'sprites.js'.
     }
 
     // 4 Methods to move the player arround 
@@ -374,6 +411,32 @@ class Monster extends Character {
             }
         }
         return false; // if none of the testings above were true, that means: no collision!  Thus, return false.
+    }
+
+    // Method to trigger everything that depends on the monster dying
+    monsterDied(index) {
+        // inserting a gold coin into its array
+        goldCoins.push(this);
+
+        // inserting a potion into its array (with a 10% chance!)
+        if (Math.floor(Math.random() * 10) === 0) { 
+            potions.push(this); 
+        }
+        
+        // inserting a gravestone into its array
+        graves.push(this);
+        // to keep the count of displayed graves up to 2 at the time
+        if (graves.length > 2) graves.shift(); // remove the first in the array
+        
+        // increase experience for the player
+        player.experience += this.yieldExperience;
+        player.levelUp(); // checking to update its level
+        
+        // removing the dead monster from the array and from the players surrounding
+        this.sound.pause();
+        monsters.splice(index, 1);
+        monstersHealthBar.splice(index, 1);
+        player.surroundingMonsters.splice(0, 1);
     }
 }
 

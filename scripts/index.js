@@ -1,5 +1,6 @@
 // Fibia, the game: main javascript file
 
+
 // Instatiating the canvas
 const canvas = document.getElementById('the-canvas');
 const context = canvas.getContext("2d");
@@ -7,13 +8,13 @@ const context = canvas.getContext("2d");
 // Instatiating the game object
 const game = new Game();
 
-// Instatiating the player object (playerImg comes from 'sprites.js')
+// Instatiating the player object 
 const player = new Player(canvas.width/2 - 65/2, canvas.height/2 - 65/2);
-const playerHealthBar = new HealthBar(player.coordX, player.coordY , "green", player.health);
+const playerHealthBar = new HealthBar(player.coordX, player.coordY , "green", player.health); // player's health bar object
 
 // Instatiating one array for storing all monsters object 
 const monsters = []; 
-const monstersHealthBar = []; // Instatiating one array for storing all monsters health bars objects
+const monstersHealthBar = []; // One array for storing all monsters health bars objects
 
 // Instatiating the graves array
 const graves = [];
@@ -28,7 +29,6 @@ const potions = [];
 game.menu(); 
 
 
-
 // MAIN-FUNCTION: to update the game's screen
 const updateGame = () => {
     game.clearCanvas();
@@ -37,8 +37,9 @@ const updateGame = () => {
 
     // updating the sprite of the player (if the player still alive)
     if (!player.checkDeath()) {
-        player.animateSprite();
-        playerHealthBar.updateHealthBar(player.coordX, player.coordY, player.health);
+        player.animateSprite(); // player's own sprite
+        playerHealthBar.updateHealthBar(player.coordX, player.coordY, player.health); // player's health bar
+        player.renderAttackAnimation(); // player's attack
     }
 
     // updating the sprite of all the monsters
@@ -48,70 +49,13 @@ const updateGame = () => {
             monstersHealthBar[i].updateHealthBar(monsters[i].coordX, monsters[i].coordY, monsters[i].health);
             monsters[i].renderAttackAnimation();   
         } else { // if the monster is dead, do:
-            console.log('monster morreu'); //-------------------------------DEBUGGER
-            
-            //inserting a gold coin into its array
-            goldCoins.push(monsters[i]);
-
-            // inserting a potion into its array (with a 10% chance)
-            if (Math.floor(Math.random() * 10) === 0) { potions.push(monsters[i]); }
-            
-            // inserting a gravestone into its array
-            // monsters[i].coordX += 40;
-            // monsters[i].coordY += 40;
-            graves.push(monsters[i]);
-
-            // to keep the count of displayed graves up to 2 at the time
-            if (graves.length > 2) graves.shift(); // remove the first in the array
-            // increase experience for the player
-            player.experience += monsters[i].yieldExperience;
-            player.levelUp(); // checking to update its level
-            // removing the monster from the array and from the players surrounding
-            monsters[i].sound.pause();
-            monsters.splice(i, 1);
-            monstersHealthBar.splice(i, 1);
-            player.surroundingMonsters.splice(0, 1);
+            //console.log('monster morreu'); //-------------------------------DEBUGGER
+            monsters[i].monsterDied(i);
         }
     }
 
-    // updating the sprites of all players attack
-    player.renderAttackAnimation();
-
-    // updating the sprites of all the graves (if any) 
-    for (let i = 0; i < graves.length; i++) {
-        graves[i].coordX += 20;
-        graves[i].coordY += 20;
-        graves[i].image = graveImg;
-        graves[i].width = 45;
-        graves[i].height = 45;
-        graves[i].updateSprite();
-        graves[i].coordX -= 20;
-        graves[i].coordY -= 20;
-    }
-
-    // updating the sprites of all the gold (if any) 
-    for (let i = 0; i < goldCoins.length; i++) {
-        goldCoins[i].coordX += 20;
-        goldCoins[i].coordY += 35;
-        goldCoins[i].image = goldImg;
-        goldCoins[i].width = 20;
-        goldCoins[i].height = 20;
-        goldCoins[i].updateSprite();
-        goldCoins[i].coordX -= 20;
-        goldCoins[i].coordY -= 35;
-    }
-
-    // updating the sprites of all the potions (if any) 
-    for (let i = 0; i < potions.length; i++) {
-        potions[i].coordX += 20;
-        potions[i].coordY += 45;
-        potions[i].image = potionImg;
-        potions[i].width = 20;
-        potions[i].height = 20;
-        potions[i].updateSprite();
-        potions[i].coordX -= 20;
-        potions[i].coordY -= 45;
-    }
+    // Updating all static sprites (graves, potions, gold coins)
+    game.updateStaticSprites(); 
 
     // Checking if there is any loot to be picked up
     player.looting();
@@ -136,7 +80,7 @@ const updateGame = () => {
     game.animationId = requestAnimationFrame(updateGame);
 }
 
-// FUNCTION: Waiting for the screen to load.
+// FUNCTION: Waiting for the screen to load (store the listening)
 window.onload = () => {    
     // LISTENER: tracking the moviment keys for the player
     document.addEventListener('keyup', (event) => {
@@ -184,6 +128,7 @@ window.onload = () => {
 FUNCTION: To instantiate monsters every iteration. Rules: 
     - Up to 4 monsters on the screen at any given time; 
     - The monster that will be generated respects the current level of the player;
+    - They appear in a random valid position;
     - They can't overlap each other.
 */
 function monsterGenerator() {
@@ -203,7 +148,7 @@ function monsterGenerator() {
         }
         // if there is an overlapping situation, remove the later monster inserted
         if (overlappingMonster()) { 
-            console.log('!!!entrou no POP!!!');  //----------------------------DEBUGGER
+            //console.log('!!!entrou no pop!!!');  //----------------------------DEBUGGER
             monsters.pop();
             monstersHealthBar.pop();
             i--; // the i controler in the for loop must be decresed since we removed one monster
