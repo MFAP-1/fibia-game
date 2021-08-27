@@ -200,14 +200,14 @@ class Player extends Character {
     constructor(coordX, coordY) {
         // 'super-requirement-order': coordX, coordY, width, height, image, health, strength, velocity
         super(coordX, coordY, 65, 65, playerImg, 150, 15, 32);
-
         this.level = 1;
         this.experience = 0;
         this.goldColleted = 0;
         this.surroundingMonsters = [];
-        this.sx = 5;
+        this.attackImg = playerAttackImg; // all images/sprites comes from the file 'sprites.js'.
+        // variables for the player's animation sprite
+        this.sx = 5; 
         this.sy = 0;
-        this.attackImg = playerAttackImg; // all images comes from 'sprites.js'.
     }
 
     // 4 Methods to move the player arround 
@@ -258,8 +258,7 @@ class Player extends Character {
 
     // Method to check if there is a collision (triggered by the player)
     playerCollisionDetection() {
-        //console.log('Surrounding (triggered by player)=',player.surroundingMonsters); // --------------DEBUGGER
-        // first, checking collision with the wall
+        // first, checking collision with the canvas' wall
         let collision = (this.left() <= 0 || this.right() >= canvas.width || this.top() <= 0 || this.bottom() >= canvas.height);
         if (collision) return true; // if statement to check whether the collision has occurred
         // now checking collision with any given monster from the array of monsters
@@ -281,10 +280,10 @@ class Player extends Character {
     
     // Method to check the player level based on its experience
     levelUp() {
-        const experienceTable = [1000, 2050, 4200, 8600, 17600, 36080]; // pre-defined amounts of experience required for leveling up
+        const experienceTable = [1000, 2050, 4200, 8600, 17600, 36080, 73000]; // pre-defined required experience for leveling up
         for (let i = 0; i < experienceTable.length; i++) {
             if (this.experience > experienceTable[i]){
-                this.level = i + 2; // +2 cause in the 0 index is the level up from lvl 1 to 2. and so on.
+                this.level = i + 2; // +2 cause in the 0 index is the level up from lvl 1 to 2. And so on.
             }
         }
         // updating the level on the screen
@@ -294,28 +293,25 @@ class Player extends Character {
 
     // Method for the player to cause damage
     attacking(clickedX, clickedY) {
-        //console.log('player is attacking(!). He clicked at: ', clickedX, '/ y: ',clickedY);//----------DEBUGGER
         // for meele attack, check if the clicked monster is surrounding the player
         this.surroundingMonsters.forEach(monster => {
             if ((clickedX >= monster.coordX && clickedX <= monster.coordX + monster.width) &&
                 (clickedY >= monster.coordY && clickedY <= monster.coordY + monster.height)) {
-                    // playing the sound
-                    engageCombatSound.play();
+                    engageCombatSound.play(); // playing the attack sound
                     // Updating the attack animation object/element
                     player.attackAnimation.xPosition = player.coordX + player.width / 2;
                     player.attackAnimation.yPosition = player.coordY + player.height / 2;
                     player.attackAnimation.targetX = monster.coordX + monster.width / 2;
                     player.attackAnimation.targetY = monster.coordY + monster.height / 2;
-                    // 
+                    // decresing the monster's health
                     monster.health -= player.strength;
-                    //console.log('COMBATE (player atacando):', player.health, monster.health); //------------------------DEBUGGER
             }
         });
     }
 
     // Method to check and loot anything that it is on the floor (gold or potion)
     looting() {
-        // looting gold
+        // looting gold coins
         goldCoins.forEach((coin, index) => {
             if(clashIdentifier(player, coin)) {
                 this.goldColleted++; 
@@ -351,12 +347,12 @@ class Monster extends Character {
         super(coordX, coordY, width, height, image, health, strength, velocity);
 
         this.yieldExperience = yieldExperience; // amount of experience that it will yield to the player after
-        this.combat = false; // not in combat
+        this.combat = false; // false = not in combat
         this.moveDirection = 1; // 0 - up, 1- down, 2- left and 3- right
-        this.moveCooldown = moveCooldown;
+        this.moveCooldown = moveCooldown; // cooldown to define the time interval between moves on the screen
     }
 
-    // Method to set the movement of the monster towards the palyer
+    // Method to set the movement of the monster towards the player
     chasePlayer() {
         // Calculating the difference vector
         let dx = player.coordX + (player.width / 2) - this.coordX; // target - this position
@@ -375,7 +371,6 @@ class Monster extends Character {
             this.determineMoveDirection(dx, dy);
             this.coordX += dx * this.velocity;
             this.coordY += dy * this.velocity;
-            //console.log(dx, dy); //-----------------------DEBUGGER
             if (this.monsterCollisionDetection()) { // if there is a collision, revert the movement
                 this.coordX -= (dx * this.velocity);
                 this.coordY -= (dy * this.velocity);
@@ -387,7 +382,6 @@ class Monster extends Character {
     determineMoveDirection(dx, dy) {
         let angle = (Math.atan2(dy, dx) * 180 / Math.PI) * -1;
         if (angle < 0) { angle += 360; }
-        //console.log('angulo = ', angle); //-----------------------DEBUGGER
         if (angle > 45 && angle < 135) {
             this.moveDirection = 0; // up
         } else if (angle > 225 && angle < 315){ // down
@@ -401,9 +395,8 @@ class Monster extends Character {
 
     // Method to cause damage to the player if it is colliding with one or plus monster(s)
     causeDamage() {
-        // playing the sound
         this.sound.pause(); // interrupting longer sounds that lingers one iteration to the other
-        this.sound.play();
+        this.sound.play(); // playing the attack sound
         // Updating the attack animation object/element
         this.attackAnimation.xPosition = this.coordX + this.width / 2;
         this.attackAnimation.yPosition = this.coordY + this.height / 2;
@@ -411,13 +404,11 @@ class Monster extends Character {
         this.attackAnimation.targetY = player.coordY + player.height / 2;
         // decreasing the player's health
         player.health -= this.strength; 
-        //console.log('COMBATE (monstro atacando):', player.health, this.health); //-----------------------DEBUGGER
     }
     
     // Method to check if there is a collision (triggered by a monster)
     monsterCollisionDetection() {
-        //console.log('Surrounding (triggered by monster)=',player.surroundingMonsters); // --------------DEBUGGER
-        // first, checking collision with the wall
+        // first, checking collision with the canvas' wall
         let collision = (this.left() <= 0 || this.right() >= canvas.width || this.top() <= 0 || this.bottom() >= canvas.height);
         if (collision) return true; // if statement to check whether the collision has occurred
         // checking against the player sprite
@@ -441,22 +432,18 @@ class Monster extends Character {
     monsterDied(index) {
         // inserting a gold coin into its array
         goldCoins.push(this);
-
         // inserting a potion into its array (with a 10% chance!)
         if (Math.floor(Math.random() * 10) === 0) { 
             potions.push(this); 
         }
-        
         // inserting a gravestone into its array
         graves.push(this);
         // to keep the count of displayed graves up to 2 at the time
         if (graves.length > 2) graves.shift(); // remove the first in the array
-        
         // increase experience for the player
         player.experience += this.yieldExperience;
-        player.levelUp(); // checking to update its level
-        
-        // removing the dead monster from the array and from the players surrounding
+        player.levelUp(); // checking to update the player's level
+        // removing the dead monster from its array and from the players surrounding
         this.sound.pause();
         monsters.splice(index, 1);
         monstersHealthBar.splice(index, 1);
@@ -550,6 +537,7 @@ class GiantAnt extends Monster {
         if (game.frames % 30 === 0) { // every 30 frames (0.5 seconds)
             this.generateAnimationType(); // to change the sprite's animation
         }
+        // rendering image
         context.drawImage(this.image, this.sx, this.sy, 60, 60, this.coordX, this.coordY, this.width, this.height);
     }
 }
@@ -627,6 +615,7 @@ class GiantWasp extends Monster {
         if (game.frames % 30 === 0) { // every 30 frames (0.5 seconds)
             this.generateAnimationType(); // to change the sprite's animation
         }
+        // rendering image
         context.drawImage(this.image, this.sx, this.sy, 60, 60, this.coordX, this.coordY, this.width, this.height);
     }
 }
@@ -705,6 +694,7 @@ class GiantSpider extends Monster {
         if (game.frames % 30 === 0) { // every 30 frames (0.5 seconds)
             this.generateAnimationType(); // to change the sprite's animation
         }
+        // rendering image
         context.drawImage(this.image, this.sx, this.sy, 65, 65, this.coordX, this.coordY, this.width, this.height);
     }
 }
@@ -794,6 +784,7 @@ class Demon extends Monster {
         if (game.frames % 30 === 0) { // every 30 frames (0.5 seconds)
             this.generateAnimationType(); // to change the sprite's animation
         }
+        // rendering image
         context.drawImage(this.image, this.sx, this.sy, 64, 64, this.coordX, this.coordY, this.width, this.height);
     }
 }

@@ -1,4 +1,4 @@
-/* Styles for Fibia, the game */
+/* Fibia, the game: styles  */
 
 /* general styling */
 * {
@@ -19,7 +19,6 @@ main {
     display: flex;
     align-items: center;
 }
-
 
 #main-container {
     display: flex;

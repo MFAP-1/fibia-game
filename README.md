@@ -16,7 +16,7 @@ This is an open source project, feel free to fork it, make improvements and subm
 **Feedback are more than welcome!** Just keep in mind that this was a one-week educational project.
 
 ## Find more about this project
-To see a slide presentation, just follow the link: <a href="/">Fibia slide presentation</a>.
+To see a slide presentation, just follow the link: <a href="https://docs.google.com/presentation/d/1j7yronSwywCUtWFUyfTaDcwny59ngEuGDApPNWija4I/edit?usp=sharing">Fibia slide presentation</a>.
 
 ## Disclaimer
 The Fibia game-project was inspired in a classic MMORPG Tibia (https://www.tibia.com/), and it was built solely for education purposes. Thus, I do not own any copyrights to  sprites nor sounds used in this project.

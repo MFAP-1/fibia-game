@@ -8,15 +8,15 @@ const context = canvas.getContext("2d");
 // Instatiating the game object
 const game = new Game();
 
-// Instatiating the player object 
+// Instatiating the player object and its health bar 
 const player = new Player(canvas.width/2 - 65/2, canvas.height/2 - 65/2);
 const playerHealthBar = new HealthBar(player.coordX, player.coordY , "green", player.health); // player's health bar object
 
 // Instatiating one array for storing all monsters object 
 const monsters = []; 
-const monstersHealthBar = []; // One array for storing all monsters health bars objects
+const monstersHealthBar = []; // One array for storing all monsters' health bars objects
 
-// Instatiating the graves array
+// Instatiating the grave's array
 const graves = [];
 
 // Instatiating the gold coins array
@@ -48,8 +48,7 @@ const updateGame = () => {
             monsters[i].animateSprite();
             monstersHealthBar[i].updateHealthBar(monsters[i].coordX, monsters[i].coordY, monsters[i].health);
             monsters[i].renderAttackAnimation();   
-        } else { // if the monster is dead, do:
-            //console.log('monster morreu'); //-------------------------------DEBUGGER
+        } else { // if the monster is dead
             monsters[i].monsterDied(i);
         }
     }
@@ -63,46 +62,56 @@ const updateGame = () => {
     // combat
     game.combatManager();
     
-    // moving all monters to a random position
+    // moving all monters towards the player's position
     monsters.forEach(monster => { monster.chasePlayer(); });
 
     // Generating monsters on the screen
     monsterGenerator();
     
-    // Checking the loss condition of the game (if the player still alive)
+    // Checking the loss condition of the game (if the player is dead)
     if (!player.alive) {
         cancelAnimationFrame(game.animationId);
         game.gameOver(); // render gameOver screen
         return; // to stop this loop (updateGame() main-function)
     }
 
-    // Scheduling updates to the canvas (recursive function)
+    // Scheduling updates to the canvas
     game.animationId = requestAnimationFrame(updateGame);
 }
 
 // FUNCTION: Waiting for the screen to load (store the listening)
 window.onload = () => {    
-    // LISTENER: tracking the moviment keys for the player (used to move the player OR set the level of difficulty)
+    // LISTENER: tracking the moviment keys for the player (used to move the player OR set the level of difficulty for the game)
     document.addEventListener('keyup', (event) => {
         switch (event.keyCode) {
             case 38: // arrow key up
             case 87: // 'w'
-                player.moveUp();
                 // if statement to set up the game difficulty in the menu screen
                 if (game.difficulty === 2 && !game.animationId) { 
                     game.difficulty = 1;
+                    footstepSound.play(); // using a sound to improve the selection action
                 } else if (game.difficulty === 3 && !game.animationId) {
                     game.difficulty = 2;
-                } 
+                    footstepSound.play();
+                } else if (game.difficulty === 1 && !game.animationId) {
+                    footstepSound.play();
+                } else { // when the game is running  (game.animation === true)
+                    player.moveUp(); // moving the player
+                }
                 break;
             case 40: // arrow key down
             case 83: // 's'
-                player.moveDown();
                 if (game.difficulty === 1 && !game.animationId) {
                     game.difficulty = 2;
+                    footstepSound.play();
                 } else if (game.difficulty === 2 && !game.animationId) {
                     game.difficulty = 3;
-                }   
+                    footstepSound.play();
+                } else if (game.difficulty === 3 && !game.animationId) {
+                    footstepSound.play();
+                } else { // when the game is running  (game.animation === true)
+                    player.moveDown();
+                }
                 break;
             case 37: // arrow key left
             case 65: // 'a'
@@ -116,7 +125,7 @@ window.onload = () => {
     });
 
 
-    // LISTENER: waiting for the 'ENTER' command on the menu, to start
+    // LISTENER: waiting for the 'ENTER' command on the menu to start the game
     document.addEventListener('keyup', (event) => {
         if (event.keyCode === 13) { // enter
             cancelAnimationFrame(game.menuId); // stop menu render-loop
@@ -167,7 +176,6 @@ function monsterGenerator() {
         }
         // if there is an overlapping situation, remove the later monster inserted
         if (overlappingMonster()) { 
-            //console.log('!!!entrou no pop!!!');  //----------------------------DEBUGGER
             monsters.pop();
             monstersHealthBar.pop();
             i--; // the i controler in the for loop must be decresed since we removed one monster
@@ -188,23 +196,19 @@ function randomCoord() {
 // AUX-FUNCTION: To check the monster overlapping each other when generating a new one
 function overlappingMonster() {
     for (let i = 0; i < monsters.length; i++) { // outer loop: to check every element on the monsters array
-        //console.log('Current comparing monster: ', monsters[i]);  //--------------------------------------DEBUGGER
         // checking against the player sprite
         if (clashIdentifier(monsters[i], player)) {
             return true; // stops function and return true when one overlap is found
         }
-
         // checking against the graves sprites
         graves.forEach(grave => {
             if (clashIdentifier(monsters[i], grave)) {
                 return true; // stops function and return true when one overlap is found
             }
         });
-
         // checking against live monsters
         for (let j = i + 1; j < monsters.length; j++) { // 
             if (clashIdentifier(monsters[i], monsters[j])) {
-                //console.log('!!!entrou no IF DA FUNCÇÃO DE CHECKAR!!!');  //--------------------------------------DEBUGGER
                 return true; // stops function and return true when one overlap is found
             }
         }
