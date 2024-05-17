@@ -18,6 +18,7 @@ main {
   color: #cca06d;
   display: flex;
   align-items: center;
+  height: calc(100vh - 5vh - 8vh);
 }
 
 #main-container {
@@ -130,6 +131,9 @@ footer {
   background-repeat: no-repeat;
   background-position: left;
   text-align: center;
+  min-height: 5vh;
+  height: 5vh;
+  max-height: 5vh;
 }
 
 footer a {
