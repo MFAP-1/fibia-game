@@ -2,66 +2,79 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Fibia, the game</title>
-    <link rel="icon" href="./assets/background/favicon.ico"/>
+    <link rel="icon" href="./assets/background/favicon.ico" />
 
     <!-- links -->
-    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="./styles/style.css" />
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
-</head>
-<body>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <main>
-        <div id="main-container">
-            <h1>Fibia, the game</h1>
-            <div id="status-bar">
-                <div class="status-item">
-                    <img id="level-up-icon" src="./assets/sprites/level-up.png" alt="gold coin icon"/>
-                    level: <span id='level-display'>1</span>
-                </div>
-                <div><button id="reset-btn">Reset game</button></div>
-                <div class="status-item">
-                    <img id="gold-coin-icon" src="./assets/sprites/gold-coin.png" alt="gold coin icon"/>
-                    gold: <span id='gold-display'>0</span>
-                </div>
-            </div>
-            <canvas id="the-canvas" width="650" height="650"></canvas>
+      <div id="main-container">
+        <h1>Fibia, the game</h1>
+        <div id="status-bar">
+          <div class="status-item">
+            <img
+              id="level-up-icon"
+              src="./assets/sprites/level-up.png"
+              alt="gold coin icon"
+            />
+            level: <span id="level-display">1</span>
+          </div>
+          <div><button id="reset-btn">Reset game</button></div>
+          <div class="status-item">
+            <img
+              id="gold-coin-icon"
+              src="./assets/sprites/gold-coin.png"
+              alt="gold coin icon"
+            />
+            gold: <span id="gold-display">0</span>
+          </div>
         </div>
-        <aside>
-            <h3>Commands:</h3>
-            <ul>
-                <li>Move your character with WASD or arrow keys;</li>
-                <li>Attack a nearby monster by just clicking with your mouse;</li>
-                <li>Pick-up loot by simpling walking over it (gold coins and potions).</li>
-            </ul>
-            <hr>
-            <h3>Goals:</h3>
-            <ul>
-                <li>Gather gold coins;</li>
-                <li>Kill monsters to gain levels;</li>
-                <li>Have fun.</li>
-            </ul>
-            <hr>
-            <h3>Be cautious:</h3>
-            <p>Whenever you are near a monster, it will not hesitate to attack you.</p>
-        </aside>
+        <canvas id="the-canvas" width="650" height="650"></canvas>
+      </div>
+      <aside>
+        <h3>Commands:</h3>
+        <ul>
+          <li>Move your character with WASD or arrow keys;</li>
+          <li>Attack a nearby monster by just clicking with your mouse;</li>
+          <li>
+            Pick-up loot by simpling walking over it (gold coins and potions).
+          </li>
+        </ul>
+        <hr />
+        <h3>Goals:</h3>
+        <ul>
+          <li>Gather gold coins;</li>
+          <li>Kill monsters to gain levels;</li>
+          <li>Have fun.</li>
+        </ul>
+        <hr />
+        <h3>Be cautious:</h3>
+        <p>
+          Whenever you are near a monster, it will not hesitate to attack you.
+        </p>
+      </aside>
     </main>
-    
-    
+
     <footer>
-        <div id="copyright-text">
-            © Copyright 2021: by
-            <a href="https://github.com/MFAP-1">MFAP-1</a>.
-        </div>
+      <div id="copyright-text">
+        © Copyright 2021: by
+        <a href="https://github.com/MFAP-1">MFAP-1</a>.
+      </div>
     </footer>
 
     <!-- scripts -->
@@ -69,5 +82,5 @@
     <script src="./scripts/classes.js"></script>
     <script src="./scripts/sprites.js"></script>
     <script src="./scripts/index.js"></script>
-</body>
+  </body>
 </html>
